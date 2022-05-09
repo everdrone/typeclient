@@ -1,0 +1,47 @@
+.safe-area-top {
+  padding: 0px 70px;
+  height: 27px;
+  flex-shrink: 0;
+
+  /* background-color: #0d1117; */
+
+  /* border-bottom: 1px solid #21262d;
+  height: 28px; */
+}
+
+.app-drag {
+  @apply select-none;
+  app-region: drag;
+  -webkit-app-region: drag;
+}
+
+.app-no-drag {
+  app-region: no-drag;
+  -webkit-app-region: no-drag;
+}
+
+.safe-area-top {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window {
+  /* background-image: url('/assets/top-halo@2x.png'); */
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.inner {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+  /* the inset canvas window color (darker) */
+  /* background-color: #010409; */
+}

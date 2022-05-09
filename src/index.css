@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    color: #c9d1d9;
+    /* by default, disable selection */
+    @apply select-none;
+    @apply bg-canvas-default;
+  }
+}

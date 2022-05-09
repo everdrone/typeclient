@@ -1,0 +1,13 @@
+.logo {
+  margin: 0;
+  display: inline;
+  background: -webkit-linear-gradient(
+    235deg,
+    rgba(255, 92, 169, 1) 0%,
+    rgba(255, 78, 99, 1) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  @apply text-2xl font-semibold;
+}
