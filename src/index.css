@@ -10,4 +10,8 @@
     @apply select-none;
     @apply bg-canvas-default;
   }
+
+  input {
+    @apply bg-transparent;
+  }
 }

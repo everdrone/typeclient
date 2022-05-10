@@ -1,5 +1,7 @@
 const rules = require('./webpack.rules')
 const plugins = require('./webpack.plugins')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 rules.push({
   test: /\.css$/,
@@ -24,8 +26,15 @@ module.exports = {
   module: {
     rules,
   },
-  plugins: plugins,
+  plugins: [
+    ...plugins,
+    new MonacoWebpackPlugin({
+      languages: ['json'],
+      // filename: '[name].worker.[contenthash].js',
+    }),
+  ],
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    plugins: [new TsconfigPathsPlugin()],
   },
 }
