@@ -1,9 +1,14 @@
 import React from 'react'
+import electron from 'electron'
 
 import useStore from 'lib/store'
 
 export default function ListCollections() {
   const [collections] = useStore(state => [state.collections])
+
+  const ipcRenderer = electron.ipcRenderer
+
+  console.log(ipcRenderer)
 
   return (
     <div>
@@ -18,6 +23,21 @@ export default function ListCollections() {
         ))}
       </ul>
       <button>Create Collection</button>
+      <hr />
+      <button
+        onClick={() =>
+          ipcRenderer.invoke('showMessageBox', {
+            type: 'warning',
+            buttons: ['Delete', 'Cancel'],
+            message: 'Are you sure you want to delete this collection?',
+            title: 'Delete Collection',
+            cancelId: 0,
+            noLink: true,
+          })
+        }
+      >
+        message
+      </button>
     </div>
   )
 }
