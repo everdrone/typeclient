@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import useStore from 'lib/store'
+import useStore from 'lib/zustand'
 import { NodeConfiguration } from 'typesense/lib/Typesense/Configuration'
 
 interface ErrorMapping {

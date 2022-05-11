@@ -1,7 +1,7 @@
 import React from 'react'
 import { InstantSearch, SearchBox } from 'react-instantsearch-dom'
 
-import useStore from 'lib/store'
+import useStore from 'lib/zustand'
 import LoadMoreHits from 'components/LoadMoreHits'
 
 const SimpleHit = ({ hit }: any) => (

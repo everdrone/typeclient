@@ -28,10 +28,6 @@ export interface ExtendedCollectionsMap {
   [key: string]: ExtendedCollectionDefinition
 }
 
-export interface collectionSpecificSearchParameters {
-  [key: string]: SearchParametersWithQueryBy
-}
-
 export enum DocumentAction {
   CREATE = 'create',
   UPSERT = 'upsert',
@@ -99,9 +95,8 @@ const useStore = create<Store>()(
          */
         connect: async function (apiKey, nodes) {
           if (!apiKey || !nodes || nodes.length === 0) {
-            console.warn('No API key or nodes provided')
-            set(() => ({ isConnecting: false }))
-            return
+            console.error('No API key or nodes provided')
+            return set(() => ({ isConnecting: false }))
           }
 
           let client: Client | null = null

@@ -1,7 +1,7 @@
 import React from 'react'
 import electron from 'electron'
 
-import useStore from 'lib/store'
+import useStore from 'lib/zustand'
 
 export default function ListCollections() {
   const [collections] = useStore(state => [state.collections])
@@ -31,7 +31,8 @@ export default function ListCollections() {
             buttons: ['Delete', 'Cancel'],
             message: 'Are you sure you want to delete this collection?',
             title: 'Delete Collection',
-            cancelId: 0,
+            cancelId: 1,
+            defaultId: 1,
             noLink: true,
           })
         }

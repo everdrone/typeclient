@@ -4,7 +4,7 @@ import './index.css'
 import './general.css'
 import './misc.css'
 
-import useStore from 'lib/store'
+import useStore from 'lib/zustand'
 
 import { Home, Loading, Connection, Search, Collections } from './views'
 
