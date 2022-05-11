@@ -9,10 +9,17 @@ module.exports = {
           muted: 'rgba(56, 139, 253, 0.4)',
           subtle: 'rgba(56, 139, 253, 0.15)',
         },
+        danger: {
+          fg: '#f85149',
+          emphasis: '#da3633',
+          muted: 'rgba(248,81,73,0.4)',
+          subtle: 'rgba(248,81,73,0.16)',
+        },
         primary: {
           default: '#C9D1D9',
           muted: '#8B949E',
           subtle: '#6E7681',
+          hover: 'rgba(177, 186, 196, 0.12)',
         },
         secondary: {
           emphasis: '#6E7681',

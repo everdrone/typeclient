@@ -1,16 +1,38 @@
 import React, { FC, useEffect, useState } from 'react'
 
-import './index.css'
-import './general.css'
-import './misc.css'
+import 'styles/index.css'
+import 'styles/general.css'
+import 'styles/misc.css'
 
-import useStore from 'lib/zustand'
+import useStore from 'lib/store'
 
-import { Home, Loading, Connection, Search, Collections } from './views'
+import {
+  Home,
+  Loading,
+  Connection,
+  Search,
+  Collections,
+  CreateCollection,
+} from './views'
 
 import { HashRouter, Routes, Route, Link } from 'react-router-dom'
 
-// import TestEditor from 'views/TestEditor'
+import {
+  VscDashboard,
+  VscGlobe,
+  VscVersions,
+  VscSearch,
+  VscKey,
+  VscMirror,
+  VscFile,
+  VscBeaker,
+  VscTerminal,
+  VscSignOut,
+  VscSettingsGear,
+} from 'react-icons/vsc'
+import Button from 'components/Button'
+
+import TestEditor from 'views/TestEditor'
 
 export default function App() {
   const [isConnecting, isConnected, connection, connect, disconnect] = useStore(
@@ -22,8 +44,6 @@ export default function App() {
       state.disconnect,
     ]
   )
-
-  console.log(isConnecting)
 
   useEffect(() => {
     console.log('connecting...')
@@ -57,19 +77,51 @@ export default function App() {
       <HashRouter>
         <div className="safe-area-top app-drag">Typeclient</div>
         <div className="inner">
-          {/* <Home /> */}
-          <Link to="/">Home</Link>
-          <Link to="/connection">Connection</Link>
-          <Link to="/search">Search</Link>
-          <Link to="/collections">Collections</Link>
-          <button onClick={() => disconnect()}>Disconnect</button>
-          {/* <Link to="/test_editor">Editor</Link> */}
+          <div className="flex gap-1">
+            <Link to="/">
+              <Button icon={<VscDashboard />} text="Dashboard" />
+            </Link>
+            <Link to="/search">
+              <Button icon={<VscSearch />} text="Search" />
+            </Link>
+            <Link to="/collections">
+              <Button icon={<VscVersions />} text="Collections" />
+            </Link>
+            <Link to="/documents">
+              <Button icon={<VscFile />} text="Documents" />
+            </Link>
+            <Link to="/keys">
+              <Button icon={<VscKey />} text="API Keys" />
+            </Link>
+            <Link to="/synonyms">
+              <Button icon={<VscMirror />} text="Synonyms" />
+            </Link>
+            <Link to="/curation">
+              <Button icon={<VscBeaker />} text="Curations" />
+            </Link>
+            <Link to="/test_editor">
+              <Button icon={<VscTerminal />} text="Editor" />
+            </Link>
+            <Link to="/connection">
+              <Button icon={<VscGlobe />} text="Connection" />
+            </Link>
+            <Link to="/settings">
+              <Button icon={<VscSettingsGear />} text="Settings" />
+            </Link>
+            <Button
+              icon={<VscSignOut />}
+              className="destructive"
+              text="Disconnect"
+              onClick={() => disconnect(true)}
+            />
+          </div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/connection" element={<Connection />} />
             <Route path="/search" element={<Search />} />
             <Route path="/collections" element={<Collections />} />
-            {/* <Route path="/test_editor" element={<TestEditor />} /> */}
+            <Route path="/collections/create" element={<CreateCollection />} />
+            <Route path="/test_editor" element={<TestEditor />} />
           </Routes>
         </div>
       </HashRouter>

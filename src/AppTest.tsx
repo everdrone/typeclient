@@ -1,8 +1,8 @@
 import React from 'react'
 
-import './index.css'
-import './general.css'
-import './misc.css'
+import 'styles/index.css'
+import 'styles/general.css'
+import 'styles/misc.css'
 
 import Logo from './components/Logo'
 

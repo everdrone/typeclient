@@ -1,13 +1,56 @@
 {
   "base": "vs-dark",
   "inherit": false,
-  "rules": [],
+  "rules": [
+    {
+      "token": "string.value.json",
+      "foreground": "#87ffc6"
+    },
+    {
+      "token": "string.key.json",
+      "foreground": "#bfa6ff"
+    },
+    {
+      "token": "keyword.json",
+      "foreground": "#76e3ff"
+    },
+    {
+      "token": "number.json",
+      "foreground": "#ff8ad1"
+    },
+    {
+      "token": "comment.line.json",
+      "foreground": "#596169"
+    },
+    {
+      "token": "comment.block.json",
+      "foreground": "#596169"
+    },
+    {
+      "token": "delimiter.array.json",
+      "foreground": "#939da5"
+    },
+    {
+      "token": "delimiter.bracket.json",
+      "foreground": "#939da5"
+    },
+    {
+      "token": "delimiter.comma.json",
+      "foreground": "#939da5"
+    },
+    {
+      "token": "delimiter.colon.json",
+      "foreground": "#939da5"
+    }
+  ],
   "colors": {
-    "editor.foreground": "#000000",
-    "editor.background": "#ffffff",
-    "editor.selectionBackground": "#00000020",
-    "editor.lineHighlightBackground": "#00000010",
-    "editorCursor.foreground": "#808080",
-    "editorWhitespace.foreground": "#00000020"
+    "editor.foreground": "#ffffff",
+    "editor.background": "#161B22",
+    "editor.selectionBackground": "#204062",
+    "editor.lineHighlightBackground": "#20406250",
+    "editorLineNumber.activeForeground": "#939da5",
+    "editorLineNumber.foreground": "#596169",
+    "editorCursor.foreground": "#69b9ff",
+    "editorWhitespace.foreground": "#00000000"
   }
 }

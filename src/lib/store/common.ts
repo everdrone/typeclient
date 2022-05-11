@@ -6,12 +6,14 @@ import {
   SearchParametersWithQueryBy,
   Client,
   ComponentName,
+  FieldType,
 } from './types'
 
 import { ClientSlice } from './client'
 import { CollectionSlice } from './collection'
 import { DocumentSlice } from './document'
 import { KeySlice } from './key'
+import { PreferencesSlice } from './preferences'
 
 export interface DisplayOptions {
   component: string
@@ -39,8 +41,6 @@ export enum DocumentAction {
   UPSERT = 'upsert',
   UPDATE = 'update',
 }
-
-export type Store = ClientSlice & CollectionSlice & DocumentSlice & KeySlice
 
 // this function fetches the collections from the server, then
 // compares them with the ones in the store, and returns the
@@ -106,7 +106,7 @@ export function refreshCollections(
     })
     .catch(err => {
       // cannot retrieve collections
-      throw new Error('Cannot retrieve collections')
+      throw err
     })
 
   return freshCollections
@@ -114,7 +114,7 @@ export function refreshCollections(
 
 export function getAllFieldsOfType(
   collection: CollectionSchema,
-  types: string[]
+  types: FieldType[]
 ) {
   return collection.fields.filter(
     (field: any) => field.index && types.includes(field.type) && field.name
@@ -142,3 +142,9 @@ export function getClientOrThrow(client: Client | null) {
 
   return client!
 }
+
+export type Store = ClientSlice &
+  CollectionSlice &
+  DocumentSlice &
+  KeySlice &
+  PreferencesSlice

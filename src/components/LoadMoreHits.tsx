@@ -1,6 +1,8 @@
 import React from 'react'
 import { connectInfiniteHits } from 'react-instantsearch-dom'
 
+import Button from 'components/Button'
+
 function LoadMoreHits({
   hits,
   // hasPrevious,
@@ -21,9 +23,7 @@ function LoadMoreHits({
           </li>
         ))}
       </ul>
-      <button disabled={!hasMore} onClick={refineNext}>
-        Load more
-      </button>
+      <Button disabled={!hasMore} onClick={refineNext} text="Load More" />
     </div>
   )
 }

@@ -1,0 +1,68 @@
+{
+  "additionalProperties": false,
+  "type": "object",
+  "required": ["name", "fields"],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "string",
+              "string[]",
+              "int32",
+              "int32[]",
+              "int64",
+              "int64[]",
+              "float",
+              "float[]",
+              "geopoint",
+              "geopoint[]",
+              "bool",
+              "bool[]",
+              "auto",
+              "string*"
+            ]
+          },
+          "index": {
+            "type": "boolean"
+          },
+          "optional": {
+            "type": "boolean"
+          },
+          "facet": {
+            "type": "boolean"
+          },
+          "sort": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "default_sorting_field": {
+      "type": "string"
+    },
+    "token_separators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "symbols_to_index": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

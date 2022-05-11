@@ -3,7 +3,7 @@ import { SearchParametersWithQueryBy } from 'typesense-instantsearch-adapter'
 
 export { Client } from 'typesense'
 export { NodeConfiguration } from 'typesense/lib/Typesense/Configuration'
-export { CollectionSchema } from 'typesense/lib/Typesense/Collection'
+export { CollectionSchema, FieldType } from 'typesense/lib/Typesense/Collection'
 export { CollectionCreateSchema } from 'typesense/lib/Typesense/Collections'
 export {
   KeyCreateSchema,

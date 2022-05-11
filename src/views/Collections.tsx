@@ -1,14 +1,17 @@
 import React from 'react'
 import electron from 'electron'
+import { Link } from 'react-router-dom'
 
-import useStore from 'lib/zustand'
+import useStore from 'lib/store'
+
+import Button from 'components/Button'
+
+import { VscAdd } from 'react-icons/vsc'
 
 export default function ListCollections() {
   const [collections] = useStore(state => [state.collections])
 
   const ipcRenderer = electron.ipcRenderer
-
-  console.log(ipcRenderer)
 
   return (
     <div>
@@ -22,8 +25,10 @@ export default function ListCollections() {
           </li>
         ))}
       </ul>
-      <button>Create Collection</button>
-      <hr />
+      <Link to="/collections/create">
+        create
+        {/* <Button icon={<VscAdd />} text="New Collection" /> */}
+      </Link>
       <button
         onClick={() =>
           ipcRenderer.invoke('showMessageBox', {

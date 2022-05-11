@@ -15,7 +15,8 @@
       "data": ["src/data/*"],
       "components": ["src/components/*"],
       "lib": ["src/lib/*"],
-      "views": ["src/views/*"]
+      "views": ["src/views/*"],
+      "styles": ["src/styles/*"]
     }
   },
   "include": ["src/**/*"],

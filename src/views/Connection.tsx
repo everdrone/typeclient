@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import useStore from 'lib/zustand'
-import { NodeConfiguration } from 'typesense/lib/Typesense/Configuration'
+
+import { NodeConfiguration } from 'lib/store/types'
+import useStore from 'lib/store'
 
 interface ErrorMapping {
   apiKey: string | null

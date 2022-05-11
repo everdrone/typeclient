@@ -11,12 +11,10 @@
 
 .app-drag {
   @apply select-none;
-  app-region: drag;
   -webkit-app-region: drag;
 }
 
 .app-no-drag {
-  app-region: no-drag;
   -webkit-app-region: no-drag;
 }
 
@@ -40,6 +38,7 @@
 
 .inner {
   padding: 16px;
+  padding-top: 0px;
   height: 100%;
   overflow-y: auto;
   /* the inset canvas window color (darker) */
