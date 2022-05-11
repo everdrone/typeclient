@@ -1,7 +1,17 @@
-import { CollectionSchema, SearchParametersWithQueryBy } from './types'
+import deepEqual from 'fast-deep-equal'
+import deepDiff from 'deep-diff'
+
+import {
+  CollectionSchema,
+  SearchParametersWithQueryBy,
+  Client,
+  ComponentName,
+} from './types'
 
 import { ClientSlice } from './client'
 import { CollectionSlice } from './collection'
+import { DocumentSlice } from './document'
+import { ApiKeySlice } from './apiKey'
 
 export interface DisplayOptions {
   component: string
@@ -30,44 +40,105 @@ export enum DocumentAction {
   UPDATE = 'update',
 }
 
-// export interface Store {
-//   /* state */
-//   client: Client | null
-//   adapter: TypesenseInstantsearchAdapter | null
-//   isConnected: boolean
-//   isConnecting: boolean
-//   connection: {
-//     nodes: NodeConfiguration[]
-//     apiKey: string
-//   }
-//   currentCollection: string | null // should we just use ExtendedCollectionDefinition?
-//   collections: ExtendedCollectionsMap
+export type Store = ClientSlice & CollectionSlice & DocumentSlice & ApiKeySlice
 
-//   /* actions */
-//   connect: (apiKey: string, nodes: NodeConfiguration[]) => Promise<void>
-//   disconnect: () => void
-//   healthCheck: () => Promise<boolean>
-//   updateCollections: () => void
-//   setCollectionSettings: (
-//     name: string,
-//     settings: {
-//       searchParameters: SearchParametersWithQueryBy
-//       displayOptions: DisplayOptions
-//     }
-//   ) => void
-//   setCurrentCollection: (name?: string) => void
-//   getCurrentCollection: () => ExtendedCollectionDefinition | null
+// this function fetches the collections from the server, then
+// compares them with the ones in the store, and returns the
+// merges them so that the client is always up to date
+export function refreshCollections(
+  fromClient: Client | null,
+  oldCollections: ExtendedCollectionsMap
+): ExtendedCollectionsMap {
+  let client = getClientOrThrow(fromClient)
 
-//   /* collection actions */
-//   dropCollection: (name: string) => Promise<boolean>
-//   createCollection: (schema: CollectionCreateSchema) => Promise<boolean>
+  const freshCollections: ExtendedCollectionsMap = {}
 
-//   /* document actions */
-//   upsertDocument: (
-//     collection: string,
-//     document: any | any[],
-//     action: DocumentAction
-//   ) => Promise<boolean>
-// }
+  client
+    .collections()
+    .retrieve()
+    .then(newCollections => {
+      // compare and merge
+      newCollections.map(newCollection => {
+        if (!(newCollection.name in oldCollections)) {
+          // new collection not preset in the store, create it
+          freshCollections[newCollection.name] = {
+            schema: newCollection,
+            searchParameters: {
+              query_by: getAllFieldsOfType(newCollection, [
+                'string',
+                'string[]',
+              ])
+                .map(field => field.name)
+                .join(','),
+            },
+            displayOptions: {
+              component: ComponentName.DEFAULT,
+              map: {},
+            },
+          }
+        }
 
-export type Store = ClientSlice & CollectionSlice
+        const existingCollection = oldCollections[newCollection.name]
+
+        if (deepEqual(newCollection, existingCollection.schema)) {
+          // is the same, add it as is
+          freshCollections[newCollection.name] = { ...existingCollection }
+        } else {
+          // not the same, reset the configuration
+          // TODO: later we might want to make a nicer merge instead of just resetting
+          freshCollections[newCollection.name] = {
+            schema: newCollection,
+            searchParameters: {
+              query_by: getAllFieldsOfType(newCollection, [
+                'string',
+                'string[]',
+              ])
+                .map(field => field.name)
+                .join(','),
+            },
+            displayOptions: {
+              component: ComponentName.DEFAULT,
+              map: {},
+            },
+          }
+        }
+      })
+    })
+    .catch(err => {
+      // cannot retrieve collections
+      throw new Error('Cannot retrieve collections')
+    })
+
+  return freshCollections
+}
+
+export function getAllFieldsOfType(
+  collection: CollectionSchema,
+  types: string[]
+) {
+  return collection.fields.filter(
+    (field: any) => field.index && types.includes(field.type) && field.name
+  )
+}
+
+export async function checkConnection(client: Client | null) {
+  if (!client) return false
+  try {
+    const result = await client.health.retrieve()
+    if ('ok' in result) {
+      return result.ok
+    }
+  } catch (err) {
+    console.error(err)
+  }
+
+  return false
+}
+
+export function getClientOrThrow(client: Client | null) {
+  if (!client) {
+    throw new Error('Client is not connected')
+  }
+
+  return client!
+}

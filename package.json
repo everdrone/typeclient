@@ -28,6 +28,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "@electron-forge/plugin-webpack": "6.0.0-beta.63",
+    "@types/deep-diff": "^1.0.1",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "@types/react-instantsearch-dom": "^6.12.3",
@@ -54,6 +55,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.4",
+    "deep-diff": "^1.0.2",
     "deepmerge": "^4.2.2",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.0.1",
