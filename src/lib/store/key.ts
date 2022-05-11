@@ -9,18 +9,18 @@ import {
 
 import { getClientOrThrow, Store } from './common'
 
-export interface ApiKeySlice {
-  createApiKey: (options: KeyCreateSchema) => Promise<KeySchema | false>
-  retrieveApiKey: (id: number) => Promise<KeySchema | false>
-  getAllApiKeys: () => Promise<KeysRetrieveSchema | false>
-  deleteApiKey: (id: number) => Promise<KeyDeleteSchema | false>
+export interface KeySlice {
+  createKey: (options: KeyCreateSchema) => Promise<KeySchema | false>
+  retrieveKey: (id: number) => Promise<KeySchema | false>
+  getAllKeys: () => Promise<KeysRetrieveSchema | false>
+  deleteKey: (id: number) => Promise<KeyDeleteSchema | false>
 }
 
-const createApiKeySlice = (
+const createKeySlice = (
   set: SetState<Store>,
   get: GetState<Store>
-): ApiKeySlice => ({
-  createApiKey: async function (options) {
+): KeySlice => ({
+  createKey: async function (options) {
     let client = getClientOrThrow(get().client)
 
     try {
@@ -32,7 +32,7 @@ const createApiKeySlice = (
       return false
     }
   },
-  retrieveApiKey: async function (id) {
+  retrieveKey: async function (id) {
     let client = getClientOrThrow(get().client)
 
     try {
@@ -44,7 +44,7 @@ const createApiKeySlice = (
       return false
     }
   },
-  getAllApiKeys: async function () {
+  getAllKeys: async function () {
     let client = getClientOrThrow(get().client)
 
     try {
@@ -56,7 +56,7 @@ const createApiKeySlice = (
       return false
     }
   },
-  deleteApiKey: async function (id) {
+  deleteKey: async function (id) {
     let client = getClientOrThrow(get().client)
 
     try {
@@ -70,4 +70,4 @@ const createApiKeySlice = (
   },
 })
 
-export default createApiKeySlice
+export default createKeySlice

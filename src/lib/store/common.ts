@@ -11,7 +11,7 @@ import {
 import { ClientSlice } from './client'
 import { CollectionSlice } from './collection'
 import { DocumentSlice } from './document'
-import { ApiKeySlice } from './apiKey'
+import { KeySlice } from './key'
 
 export interface DisplayOptions {
   component: string
@@ -40,7 +40,7 @@ export enum DocumentAction {
   UPDATE = 'update',
 }
 
-export type Store = ClientSlice & CollectionSlice & DocumentSlice & ApiKeySlice
+export type Store = ClientSlice & CollectionSlice & DocumentSlice & KeySlice
 
 // this function fetches the collections from the server, then
 // compares them with the ones in the store, and returns the
