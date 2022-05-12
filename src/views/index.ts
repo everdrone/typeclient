@@ -6,3 +6,6 @@ export { default as Search } from './Search'
 
 export { default as Collections } from './Collections'
 export { default as CreateCollection } from './CreateCollection'
+export { default as Collection } from './Collection'
+
+export { default as CreateDocument } from './CreateDocument'

@@ -14,10 +14,11 @@ rules.push({
 })
 
 rules.push({
-  test: /\.s(a|c)ss$/,
+  test: /\.scss$/,
   use: [
     { loader: 'style-loader' },
-    { loader: 'css-loader' },
+    { loader: 'css-loader', options: { importLoaders: 1 } },
+    { loader: 'postcss-loader' },
     { loader: 'sass-loader' },
   ],
 })
@@ -35,7 +36,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.scss'],
     plugins: [new TsconfigPathsPlugin()],
   },
 }

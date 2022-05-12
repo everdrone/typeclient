@@ -1,4 +1,3 @@
-import path from 'path'
 import { app, BrowserWindow, ipcMain, dialog, session } from 'electron'
 import type { MessageBoxOptions } from 'electron'
 
@@ -22,6 +21,11 @@ const isDevelopment = process.env.NODE_ENV === 'development'
 // export const isLinux = os.platform() === 'linux'
 
 export const platform = process.platform
+export const appPath = app.getPath('userData')
+
+if (isDevelopment) {
+  console.log(appPath)
+}
 
 let mainWindow: BrowserWindow
 
@@ -76,6 +80,34 @@ app.on('ready', () => {
       },
     })
   })
+
+  /* event handling */
+  ipcMain.handle('showMessageBox', (event, options: MessageBoxOptions) => {
+    // console.log(event, args)
+    dialog.showMessageBox(mainWindow, options).then(response => console.log(response))
+  })
+
+  /* register events */
+  ipcMain.handle('app-close', () => {
+    mainWindow.close()
+  })
+
+  ipcMain.handle('app-minimize', () => {
+    mainWindow.minimize()
+  })
+
+  ipcMain.handle('app-maximize', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
+  })
+
+  /* send events back to renderer */
+  mainWindow.on('maximize', () => mainWindow.webContents.send('window-maximized'))
+
+  mainWindow.on('unmaximize', () => mainWindow.webContents.send('window-unmaximized'))
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -97,11 +129,3 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-/* event handling */
-ipcMain.handle('showMessageBox', (event, options: MessageBoxOptions) => {
-  // console.log(event, args)
-  dialog
-    .showMessageBox(mainWindow, options)
-    .then(response => console.log(response))
-})

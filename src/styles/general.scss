@@ -1,0 +1,105 @@
+:root {
+  --titlebar-height: 27px;
+}
+
+.app-drag {
+  @apply select-none;
+  -webkit-app-region: drag;
+}
+
+.app-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.safe-area-top {
+  padding: 0px 70px;
+  height: var(--titlebar-height);
+  flex-shrink: 0;
+
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .icon {
+    width: 35px;
+    height: var(--titlebar-height);
+    background-size: 16px;
+    background-image: url('../../assets/icon_128x128@2x.png');
+    background-position: 50%;
+    background-repeat: no-repeat;
+  }
+
+  .controls {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 16px;
+
+    div {
+      width: 46px;
+      height: var(--titlebar-height);
+      @apply flex items-center justify-center text-primary-muted hover:text-white;
+      &:hover {
+        background-color: hsla(0, 0%, 100%, 0.1);
+      }
+    }
+    .close:hover {
+      background-color: rgba(232, 17, 35, 0.9);
+    }
+  }
+}
+
+.win32 {
+  --titlebar-height: 29px;
+
+  .safe-area-top {
+    padding: 0px;
+    height: var(--titlebar-height);
+    flex-shrink: 0;
+    justify-content: space-between;
+  }
+}
+
+/* adds border */
+/* .safe-area-top {
+  border-bottom: 1px solid black;
+  height: calc(var(--titlebar-height) + 1px);
+} */
+
+/* FIXME: add a 1px border on windows that lays on top of everything (see vscode) */
+.window {
+  /* background-image: url('/assets/top-halo@2x.png'); */
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* height: 100vh; */
+
+  display: flex;
+  flex-direction: column;
+
+  /* border: 1px solid black; */
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .window-title {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0px);
+  }
+
+  .inner {
+    padding: 16px;
+    padding-top: 0px;
+    height: 100%;
+    overflow-y: auto;
+    /* the inset canvas window color (darker) */
+    /* background-color: #010409; */
+    @apply flex flex-col;
+  }
+}

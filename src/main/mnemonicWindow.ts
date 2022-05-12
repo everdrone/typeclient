@@ -1,14 +1,15 @@
-import {
-  screen,
-  BrowserWindow,
-  BrowserWindowConstructorOptions,
-} from 'electron'
+import { screen, BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import Store from 'electron-store'
 
-export default (
-  windowName: string,
-  options: BrowserWindowConstructorOptions
-): BrowserWindow => {
+export interface WindowState {
+  x: number
+  y: number
+  width: number
+  height: number
+  maximized: boolean
+}
+
+export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
   const key = 'window-state'
   const name = `window-state-${windowName}`
   const store = new Store({ name })
@@ -19,23 +20,22 @@ export default (
   let state = {}
   let win: BrowserWindow
 
-  const restore = () => store.get(key, defaultSize) as Electron.Size
+  const restore = () => store.get(key, defaultSize) as WindowState
 
   const getCurrentPosition = () => {
     const position = win.getPosition()
     const size = win.getSize()
+    const maximized = win.isFullScreen() || win.isMaximized()
     return {
       x: position[0],
       y: position[1],
       width: size[0],
       height: size[1],
+      maximized,
     }
   }
 
-  const windowWithinBounds = (
-    windowState: Electron.Rectangle,
-    bounds: Electron.Rectangle
-  ) => {
+  const windowWithinBounds = (windowState: Electron.Rectangle, bounds: Electron.Rectangle) => {
     return (
       windowState.x >= bounds.x &&
       windowState.y >= bounds.y &&
@@ -52,7 +52,7 @@ export default (
     })
   }
 
-  const ensureVisibleOnSomeDisplay = (windowState: Electron.Rectangle) => {
+  const ensureVisibleOnSomeDisplay = (windowState: WindowState) => {
     const visible = screen.getAllDisplays().some(display => {
       return windowWithinBounds(windowState, display.bounds)
     })
@@ -65,13 +65,14 @@ export default (
   }
 
   const saveState = () => {
+    // FIXME: state does not persist well when maximized!
     if (!win.isMinimized() && !win.isMaximized()) {
       Object.assign(state, getCurrentPosition())
     }
     store.set(key, state)
   }
 
-  state = ensureVisibleOnSomeDisplay(restore() as Electron.Rectangle)
+  state = ensureVisibleOnSomeDisplay(restore())
 
   const browserOptions: BrowserWindowConstructorOptions = {
     ...options,

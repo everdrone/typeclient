@@ -12,22 +12,14 @@ import {
   VscSignOut,
   VscSettingsGear,
 } from 'react-icons/vsc'
-import cn from 'clsx'
 
-import 'styles/index.css'
-import 'styles/general.css'
-import 'styles/misc.css'
+import 'styles/index.scss'
+import 'styles/general.scss'
+import 'styles/misc.scss'
 
 import useStore from 'lib/store'
 
-import {
-  Home,
-  Loading,
-  Connection,
-  Search,
-  Collections,
-  CreateCollection,
-} from './views'
+import { Home, Loading, Connection, Search, Collections, CreateCollection, Collection, CreateDocument } from './views'
 import TestEditor from 'views/TestEditor'
 
 import { HashRouter, Routes, Route, Link } from 'react-router-dom'
@@ -35,15 +27,13 @@ import Button from 'components/Button'
 import TitleBar from 'components/TitleBar'
 
 export default function App() {
-  const [isConnecting, isConnected, connection, connect, disconnect] = useStore(
-    state => [
-      state.isConnecting,
-      state.isConnected,
-      state.connection,
-      state.connect,
-      state.disconnect,
-    ]
-  )
+  const [isConnecting, isConnected, connection, connect, disconnect] = useStore(state => [
+    state.isConnecting,
+    state.isConnected,
+    state.connection,
+    state.connect,
+    state.disconnect,
+  ])
 
   useEffect(() => {
     // add class to html to indicate platform
@@ -109,12 +99,7 @@ export default function App() {
             <Link to="/settings">
               <Button icon={<VscSettingsGear />} text="Settings" />
             </Link>
-            <Button
-              icon={<VscSignOut />}
-              className="destructive"
-              text="Disconnect"
-              onClick={() => disconnect(true)}
-            />
+            <Button icon={<VscSignOut />} className="destructive" text="Disconnect" onClick={() => disconnect(true)} />
           </div>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -122,6 +107,8 @@ export default function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/collections" element={<Collections />} />
             <Route path="/collections/create" element={<CreateCollection />} />
+            <Route path="/collection/:name" element={<Collection />} />
+            <Route path="/documents/create" element={<CreateDocument />} />
             <Route path="/test_editor" element={<TestEditor />} />
           </Routes>
         </div>

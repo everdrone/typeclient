@@ -4,10 +4,6 @@ import { Link } from 'react-router-dom'
 
 import useStore from 'lib/store'
 
-import Button from 'components/Button'
-
-import { VscAdd } from 'react-icons/vsc'
-
 export default function ListCollections() {
   const [collections] = useStore(state => [state.collections])
 
@@ -17,11 +13,10 @@ export default function ListCollections() {
     <div>
       <ul>
         {Object.keys(collections).map(name => (
-          <li
-            key={name}
-            onClick={() => alert('navigate to collection details')}
-          >
-            {name} ({collections[name].schema.num_documents})
+          <li key={name}>
+            <Link to={`/collection/${name}`}>
+              {name} ({collections[name].schema.num_documents})
+            </Link>
           </li>
         ))}
       </ul>

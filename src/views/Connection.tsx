@@ -5,7 +5,7 @@ import useStore from 'lib/store'
 
 import Button from 'components/Button'
 
-import 'styles/connection.css'
+import 'styles/connection.scss'
 import { VscAdd, VscTrash } from 'react-icons/vsc'
 
 interface ErrorMapping {
@@ -22,9 +22,7 @@ export default function Connection() {
   ])
 
   const [apiKey, setApiKey] = useState<string>(storedApiKey ?? '')
-  const [nodes, setNodes] = useState<string[]>(
-    ensureInitialNodeArray(storedNodes)
-  )
+  const [nodes, setNodes] = useState<string[]>(ensureInitialNodeArray(storedNodes))
   const [errors, setErrors] = useState<ErrorMapping>({
     apiKey: null,
     nodes: [null],
@@ -38,12 +36,7 @@ export default function Connection() {
   }
 
   function nodesToStringArray(nodes: NodeConfiguration[]): string[] {
-    return nodes.map(
-      node =>
-        `${node.protocol}://${node.host}:${node.port}${
-          node.path === '/' ? '' : node.path
-        }`
-    )
+    return nodes.map(node => `${node.protocol}://${node.host}:${node.port}${node.path === '/' ? '' : node.path}`)
   }
 
   function stringArrayToNodes(nodes: string[]): NodeConfiguration[] {
@@ -117,38 +110,21 @@ export default function Connection() {
       <div className="flex flex-col elevated-box">
         {errors.apiKey && <p className="text-danger-fg">{errors.apiKey}</p>}
         <label>API Key</label>
-        <input
-          type="text"
-          value={apiKey}
-          onChange={e => setApiKey(e.target.value)}
-        />
+        <input type="text" value={apiKey} onChange={e => setApiKey(e.target.value)} />
         <ul>
           <li className="flex flex-col">
-            {errors.nodes[0] && (
-              <p className="text-danger-fg">{errors.nodes[0]}</p>
-            )}
+            {errors.nodes[0] && <p className="text-danger-fg">{errors.nodes[0]}</p>}
             <label>Node</label>
-            <input
-              type="text"
-              value={nodes[0]}
-              onChange={e => setNodeAt(0, e.target.value)}
-            />
+            <input type="text" value={nodes[0]} onChange={e => setNodeAt(0, e.target.value)} />
           </li>
           {nodes.map((node, index) => {
             if (index === 0) return null
             return (
               <li key={index} className="flex flex-col">
-                {errors.nodes[index] && (
-                  <p className="text-danger-fg">{errors.nodes[index]}</p>
-                )}
+                {errors.nodes[index] && <p className="text-danger-fg">{errors.nodes[index]}</p>}
                 <label>Node {index + 1}</label>
                 <div className="flex gap-2 mb-4 nomargin">
-                  <input
-                    className="grow"
-                    type="text"
-                    value={node}
-                    onChange={e => setNodeAt(index, e.target.value)}
-                  />
+                  <input className="grow" type="text" value={node} onChange={e => setNodeAt(index, e.target.value)} />
                   <Button
                     onClick={() => removeNode(index)}
                     icon={<VscTrash className="text-lg m-[2px] leading-none" />}
@@ -158,11 +134,7 @@ export default function Connection() {
             )
           })}
           <li>
-            <Button
-              onClick={() => addNode()}
-              text="Add node"
-              icon={<VscAdd />}
-            />
+            <Button onClick={() => addNode()} text="Add node" icon={<VscAdd />} />
           </li>
         </ul>
         <Button

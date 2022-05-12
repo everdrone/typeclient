@@ -11,11 +11,7 @@ import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/createCollection.json'
 
 import Button from 'components/Button'
-import {
-  CollectionSchema,
-  CollectionCreateSchema,
-  FieldType,
-} from 'lib/store/types'
+import { CollectionSchema, CollectionCreateSchema, FieldType } from 'lib/store/types'
 
 interface FormErrors {
   name: string | null
@@ -42,24 +38,19 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
   //     { name: '', type: 'string', index: true, optional: false, facet: false },
   //   ],
   // })
+  loader.config({ monaco })
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setSchema({ ...schema, name: e.target.value })
   }
 
-  function handleChangeFieldName(
-    e: ChangeEvent<HTMLInputElement>,
-    index: number
-  ) {
+  function handleChangeFieldName(e: ChangeEvent<HTMLInputElement>, index: number) {
     const fields = [...schema.fields]
     fields[index].name = e.target.value
     setSchema({ ...schema, fields })
   }
 
-  function handleChangeFieldType(
-    e: ChangeEvent<HTMLSelectElement>,
-    index: number
-  ) {
+  function handleChangeFieldType(e: ChangeEvent<HTMLSelectElement>, index: number) {
     const fields = [...schema.fields]
     fields[index].type = e.target.value as FieldType
     setSchema({ ...schema, fields })
@@ -141,46 +132,27 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
     }
   }
 
-  console.log(
-    getAllFieldsOfType(schema as CollectionSchema, ['int32', 'float'])
-  )
+  console.log(getAllFieldsOfType(schema as CollectionSchema, ['int32', 'float']))
 
   return (
     <div>
       {errors.name && <p className="text-danger-fg">{errors.name}</p>}
-      <input
-        type="text"
-        placeholder="Collection name"
-        value={schema.name}
-        onChange={handleChangeName}
-      />
+      <input type="text" placeholder="Collection name" value={schema.name} onChange={handleChangeName} />
       <select>
         <option value=""></option>
-        {getAllFieldsOfType(schema as CollectionSchema, ['int32', 'float']).map(
-          (field, index) => (
-            <option key={index} value={field.name}>
-              {field.name}
-            </option>
-          )
-        )}
+        {getAllFieldsOfType(schema as CollectionSchema, ['int32', 'float']).map((field, index) => (
+          <option key={index} value={field.name}>
+            {field.name}
+          </option>
+        ))}
       </select>
       {errors.allFields && <p className="text-danger-fg">{errors.allFields}</p>}
       <ul>
         {schema.fields.map((field, index) => (
           <li key={index}>
-            {errors.fields[index] && (
-              <p className="text-danger-fg">{errors.fields[index]}</p>
-            )}
-            <input
-              type="text"
-              placeholder="Field"
-              value={field.name}
-              onChange={e => handleChangeFieldName(e, index)}
-            />
-            <select
-              value={field.type}
-              onChange={e => handleChangeFieldType(e, index)}
-            >
+            {errors.fields[index] && <p className="text-danger-fg">{errors.fields[index]}</p>}
+            <input type="text" placeholder="Field" value={field.name} onChange={e => handleChangeFieldName(e, index)} />
+            <select value={field.type} onChange={e => handleChangeFieldType(e, index)}>
               <option value="string">string</option>
               <option value="string[]">string[]</option>
               <option value="int32">int32</option>
@@ -231,17 +203,12 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
 }
 
 export default function CreateSchema() {
-  const [prefersJSONMode, setPrefersJSONMode] = useStore(state => [
-    state.prefersJSONMode,
-    state.setPrefersJSONMode,
-  ])
+  const [prefersJSONMode, setPrefersJSONMode] = useStore(state => [state.prefersJSONMode, state.setPrefersJSONMode])
 
   const [rawValue, setRawValue] = useState<string>('')
   const [schema, setSchema] = useState<CollectionCreateSchema>({
     name: '',
-    fields: [
-      { name: '', type: 'string', index: true, optional: false, facet: false },
-    ],
+    fields: [{ name: '', type: 'string', index: true, optional: false, facet: false }],
   })
 
   useEffect(() => {
@@ -270,14 +237,9 @@ export default function CreateSchema() {
           monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
             allowComments: false,
-            schemas: [
-              { fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema },
-            ],
+            schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
           })
-          monaco.editor.defineTheme(
-            'theme',
-            theme as Monaco.editor.IStandaloneThemeData
-          )
+          monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
         }}
         defaultLanguage="json"
         defaultValue={JSON.stringify(schema, null, 2)}

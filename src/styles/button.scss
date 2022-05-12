@@ -1,0 +1,53 @@
+.button {
+  @apply flex rounded-md items-center text-primary-default relative transition-colors;
+  padding: 6px;
+
+  &.wider {
+    @apply px-2;
+  }
+
+  &.destructive {
+    @apply text-danger-fg;
+
+    &:hover {
+      @apply bg-danger-subtle;
+    }
+
+    svg {
+      @apply text-danger-fg;
+    }
+  }
+
+  &.focused {
+    @apply bg-secondary-subtle;
+  }
+
+  &:hover {
+    @apply bg-primary-hover;
+  }
+
+  &:disabled {
+    @apply text-primary-muted;
+
+    :hover {
+      @apply bg-transparent;
+    }
+  }
+
+  svg {
+    @apply text-primary-muted;
+  }
+
+  span {
+    @apply text-sm leading-none;
+  }
+
+  svg + span {
+    @apply ml-2;
+  }
+}
+
+.button .underline {
+  @apply absolute bottom-0 left-0 right-0 rounded-md bg-accent-fg;
+  height: 2px;
+}
