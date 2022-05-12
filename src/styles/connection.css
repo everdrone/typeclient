@@ -1,0 +1,17 @@
+input[type='text'] {
+  @apply bg-canvas-default border border-border-default px-3 py-1 rounded-lg placeholder-secondary-muted mb-4;
+}
+
+.nomargin input[type='text'] {
+  @apply mb-0;
+}
+
+.elevated-box {
+  @apply bg-canvas-overlay border border-border-default p-4 rounded-xl shadow-xl;
+  width: clamp(450px, 100%, 550px);
+  margin-top: 20vh;
+}
+
+label {
+  @apply block text-sm mb-2;
+}

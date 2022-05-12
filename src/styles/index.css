@@ -9,6 +9,7 @@
     /* by default, disable selection */
     @apply select-none;
     @apply bg-canvas-default;
+    min-height: 100vh;
   }
 
   input {

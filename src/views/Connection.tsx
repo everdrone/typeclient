@@ -3,6 +3,11 @@ import React, { useState } from 'react'
 import { NodeConfiguration } from 'lib/store/types'
 import useStore from 'lib/store'
 
+import Button from 'components/Button'
+
+import 'styles/connection.css'
+import { VscAdd, VscTrash } from 'react-icons/vsc'
+
 interface ErrorMapping {
   apiKey: string | null
   nodes: (string | null)[]
@@ -108,54 +113,67 @@ export default function Connection() {
   }
 
   return (
-    <div>
-      {errors.apiKey && <p className="text-red-500">{errors.apiKey}</p>}
-      <input
-        type="text"
-        placeholder="API Key"
-        value={apiKey}
-        onChange={e => setApiKey(e.target.value)}
-      />
-      <ul>
-        <li>
-          {errors.nodes[0] && <p className="text-red-500">{errors.nodes[0]}</p>}
-          <input
-            type="text"
-            placeholder="http://localhost:8108"
-            value={nodes[0]}
-            onChange={e => setNodeAt(0, e.target.value)}
-          />
-        </li>
-        {nodes.map((node, index) => {
-          if (index === 0) return null
-          return (
-            <li key={index}>
-              {errors.nodes[index] && (
-                <p className="text-red-500">{errors.nodes[index]}</p>
-              )}
-              <input
-                type="text"
-                placeholder="http://localhost:8108"
-                value={node}
-                onChange={e => setNodeAt(index, e.target.value)}
-              />
-              <button onClick={() => removeNode(index)}>Remove</button>
-            </li>
-          )
-        })}
-        <li>
-          <button onClick={() => addNode()}>Add Node</button>
-        </li>
-      </ul>
-      <button
-        onClick={() => {
-          if (validateConnection()) {
-            connect(apiKey, stringArrayToNodes(nodes))
-          }
-        }}
-      >
-        Connect
-      </button>
+    <div className="flex justify-center items-start h-full">
+      <div className="flex flex-col elevated-box">
+        {errors.apiKey && <p className="text-danger-fg">{errors.apiKey}</p>}
+        <label>API Key</label>
+        <input
+          type="text"
+          value={apiKey}
+          onChange={e => setApiKey(e.target.value)}
+        />
+        <ul>
+          <li className="flex flex-col">
+            {errors.nodes[0] && (
+              <p className="text-danger-fg">{errors.nodes[0]}</p>
+            )}
+            <label>Node</label>
+            <input
+              type="text"
+              value={nodes[0]}
+              onChange={e => setNodeAt(0, e.target.value)}
+            />
+          </li>
+          {nodes.map((node, index) => {
+            if (index === 0) return null
+            return (
+              <li key={index} className="flex flex-col">
+                {errors.nodes[index] && (
+                  <p className="text-danger-fg">{errors.nodes[index]}</p>
+                )}
+                <label>Node {index + 1}</label>
+                <div className="flex gap-2 mb-4 nomargin">
+                  <input
+                    className="grow"
+                    type="text"
+                    value={node}
+                    onChange={e => setNodeAt(index, e.target.value)}
+                  />
+                  <Button
+                    onClick={() => removeNode(index)}
+                    icon={<VscTrash className="text-lg m-[2px] leading-none" />}
+                  />
+                </div>
+              </li>
+            )
+          })}
+          <li>
+            <Button
+              onClick={() => addNode()}
+              text="Add node"
+              icon={<VscAdd />}
+            />
+          </li>
+        </ul>
+        <Button
+          onClick={() => {
+            if (validateConnection()) {
+              connect(apiKey, stringArrayToNodes(nodes))
+            }
+          }}
+          text="Connect"
+        />
+      </div>
     </div>
   )
 }

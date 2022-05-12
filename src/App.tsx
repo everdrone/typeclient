@@ -1,4 +1,18 @@
 import React, { FC, useEffect, useState } from 'react'
+import {
+  VscDashboard,
+  VscGlobe,
+  VscVersions,
+  VscSearch,
+  VscKey,
+  VscMirror,
+  VscFile,
+  VscBeaker,
+  VscTerminal,
+  VscSignOut,
+  VscSettingsGear,
+} from 'react-icons/vsc'
+import cn from 'clsx'
 
 import 'styles/index.css'
 import 'styles/general.css'
@@ -14,25 +28,11 @@ import {
   Collections,
   CreateCollection,
 } from './views'
+import TestEditor from 'views/TestEditor'
 
 import { HashRouter, Routes, Route, Link } from 'react-router-dom'
-
-import {
-  VscDashboard,
-  VscGlobe,
-  VscVersions,
-  VscSearch,
-  VscKey,
-  VscMirror,
-  VscFile,
-  VscBeaker,
-  VscTerminal,
-  VscSignOut,
-  VscSettingsGear,
-} from 'react-icons/vsc'
 import Button from 'components/Button'
-
-import TestEditor from 'views/TestEditor'
+import TitleBar from 'components/TitleBar'
 
 export default function App() {
   const [isConnecting, isConnected, connection, connect, disconnect] = useStore(
@@ -46,6 +46,10 @@ export default function App() {
   )
 
   useEffect(() => {
+    // add class to html to indicate platform
+    const html = document.querySelector('html')
+    html.classList.add(process.platform)
+
     console.log('connecting...')
     connect(connection.apiKey, connection.nodes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,12 +59,9 @@ export default function App() {
 
   if (isConnecting) {
     return (
-      <div className="window">
-        <div className="safe-area-top app-drag">Typeclient</div>
-        <div className="inner">
-          <Loading />
-        </div>
-      </div>
+      <WindowWrapper>
+        <Loading />
+      </WindowWrapper>
     )
   }
 
@@ -75,7 +76,7 @@ export default function App() {
   return (
     <div className="window">
       <HashRouter>
-        <div className="safe-area-top app-drag">Typeclient</div>
+        <TitleBar>Typeclient</TitleBar>
         <div className="inner">
           <div className="flex gap-1">
             <Link to="/">
@@ -137,7 +138,7 @@ interface WindowProps {
 const WindowWrapper: FC<WindowProps> = ({ title = 'Typeclient', children }) => {
   return (
     <div className="window">
-      <div className="safe-area-top app-drag">Typeclient</div>
+      <TitleBar>Typeclient</TitleBar>
       <div className="inner">{children}</div>
     </div>
   )

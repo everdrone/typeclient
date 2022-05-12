@@ -8,8 +8,6 @@ import useStore from 'lib/store'
 import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/createCollection.json'
 
-loader.config({ monaco })
-
 const editorOptions = {
   minimap: {
     enabled: false,
@@ -30,6 +28,7 @@ const defaultObject = {
 
 export default function CodeEditor() {
   console.log('Editor')
+  loader.config({ monaco })
 
   const { connection, currentCollectionName, collections } = useStore()
 

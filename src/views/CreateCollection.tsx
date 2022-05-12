@@ -1,6 +1,14 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { VscBracketDot, VscPreview } from 'react-icons/vsc'
 
+import Editor, { loader } from '@monaco-editor/react'
+import Monaco from 'monaco-editor'
+import * as monaco from 'monaco-editor'
+
+import { getAllFieldsOfType } from 'lib/store/common'
 import useStore from 'lib/store'
+import theme from 'data/theme.json'
+import jsonSchema from 'data/schema/createCollection.json'
 
 import Button from 'components/Button'
 import {
@@ -8,7 +16,6 @@ import {
   CollectionCreateSchema,
   FieldType,
 } from 'lib/store/types'
-import { getAllFieldsOfType } from 'lib/store/common'
 
 interface FormErrors {
   name: string | null
@@ -16,7 +23,12 @@ interface FormErrors {
   fields: (string | null)[]
 }
 
-export default function CreateCollection() {
+interface FormProps {
+  schema: CollectionCreateSchema
+  setSchema: (schema: CollectionCreateSchema) => void
+}
+
+function CreateCollectionForm({ schema, setSchema }: FormProps) {
   const [createCollection] = useStore(state => [state.createCollection])
 
   const [errors, setErrors] = useState<FormErrors>({
@@ -24,12 +36,12 @@ export default function CreateCollection() {
     allFields: null,
     fields: [null],
   })
-  const [schema, setSchema] = useState<CollectionCreateSchema>({
-    name: '',
-    fields: [
-      { name: '', type: 'string', index: true, optional: false, facet: false },
-    ],
-  })
+  // const [schema, setSchema] = useState<CollectionCreateSchema>({
+  //   name: '',
+  //   fields: [
+  //     { name: '', type: 'string', index: true, optional: false, facet: false },
+  //   ],
+  // })
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setSchema({ ...schema, name: e.target.value })
@@ -135,7 +147,7 @@ export default function CreateCollection() {
 
   return (
     <div>
-      {errors.name && <p className="text-red-500">{errors.name}</p>}
+      {errors.name && <p className="text-danger-fg">{errors.name}</p>}
       <input
         type="text"
         placeholder="Collection name"
@@ -152,12 +164,12 @@ export default function CreateCollection() {
           )
         )}
       </select>
-      {errors.allFields && <p className="text-red-500">{errors.allFields}</p>}
+      {errors.allFields && <p className="text-danger-fg">{errors.allFields}</p>}
       <ul>
         {schema.fields.map((field, index) => (
           <li key={index}>
             {errors.fields[index] && (
-              <p className="text-red-500">{errors.fields[index]}</p>
+              <p className="text-danger-fg">{errors.fields[index]}</p>
             )}
             <input
               type="text"
@@ -214,6 +226,84 @@ export default function CreateCollection() {
       </ul>
       <button onClick={handleAddField}>Add field</button>
       <button onClick={handleCreate}>Create</button>
+    </div>
+  )
+}
+
+export default function CreateSchema() {
+  const [prefersJSONMode, setPrefersJSONMode] = useStore(state => [
+    state.prefersJSONMode,
+    state.setPrefersJSONMode,
+  ])
+
+  const [rawValue, setRawValue] = useState<string>('')
+  const [schema, setSchema] = useState<CollectionCreateSchema>({
+    name: '',
+    fields: [
+      { name: '', type: 'string', index: true, optional: false, facet: false },
+    ],
+  })
+
+  useEffect(() => {
+    if (prefersJSONMode) {
+      try {
+        setSchema(JSON.parse(rawValue))
+        console.log(schema)
+      } catch (err) {
+        console.warn('Invalid JSON')
+      }
+    }
+  }, [rawValue])
+
+  useEffect(() => {
+    if (!prefersJSONMode) {
+      setRawValue(JSON.stringify(schema, null, 2))
+    }
+  }, [schema])
+
+  const editor = (
+    <div className="h-full">
+      <Editor
+        theme="theme"
+        height="50%"
+        beforeMount={monaco => {
+          monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+            validate: true,
+            allowComments: false,
+            schemas: [
+              { fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema },
+            ],
+          })
+          monaco.editor.defineTheme(
+            'theme',
+            theme as Monaco.editor.IStandaloneThemeData
+          )
+        }}
+        defaultLanguage="json"
+        defaultValue={JSON.stringify(schema, null, 2)}
+        options={{ minimap: { enabled: false } }}
+        onChange={value => setRawValue(value)}
+        value={rawValue}
+      />
+      <button
+        onClick={() => {
+          // FIXME: validate schema and set errors at the bottom
+        }}
+      >
+        Create
+      </button>
+    </div>
+  )
+  const form = <CreateCollectionForm schema={schema} setSchema={setSchema} />
+
+  return (
+    <div>
+      <Button
+        icon={prefersJSONMode ? <VscPreview /> : <VscBracketDot />}
+        text={prefersJSONMode ? 'Form' : 'JSON'}
+        onClick={() => setPrefersJSONMode(!prefersJSONMode)}
+      />
+      {prefersJSONMode ? editor : form}
     </div>
   )
 }

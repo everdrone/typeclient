@@ -38,7 +38,7 @@ const createClientSlice = (
     let client: Client | null = null
     let adapter: TypesenseInstantsearchAdapter | null = null
     let isConnected = false
-    let collections: ExtendedCollectionsMap = get().collections ?? {}
+    let collections: ExtendedCollectionsMap = {}
     let currentCollectionName = get().currentCollectionName
 
     // create the client
