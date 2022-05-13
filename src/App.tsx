@@ -1,46 +1,49 @@
 import React, { FC, useEffect, useState } from 'react'
-import {
-  VscDashboard,
-  VscGlobe,
-  VscVersions,
-  VscSearch,
-  VscKey,
-  VscMirror,
-  VscFile,
-  VscBeaker,
-  VscTerminal,
-  VscSignOut,
-  VscSettingsGear,
-} from 'react-icons/vsc'
+import { Transition } from '@headlessui/react'
 
 import 'styles/index.scss'
-import 'styles/general.scss'
+import 'styles/global.scss'
 import 'styles/misc.scss'
 
 import useStore from 'lib/store'
 
-import { Home, Loading, Connection, Search, Collections, CreateCollection, Collection, CreateDocument } from './views'
-import TestEditor from 'views/TestEditor'
+import {
+  Connection,
+  Loading,
+  Dashboard,
+  Collections,
+  ApiKeys,
+  Aliases,
+  Search,
+  CreateCollection,
+  Collection,
+  CreateDocument,
+  Settings,
+} from './views'
 
 import { HashRouter, Routes, Route, Link } from 'react-router-dom'
-import Button from 'components/Button'
 import TitleBar from 'components/TitleBar'
+import SelectCollection from 'components/SelectCollection'
 
 export default function App() {
-  const [isConnecting, isConnected, connection, connect, disconnect] = useStore(state => [
-    state.isConnecting,
-    state.isConnected,
-    state.connection,
-    state.connect,
-    state.disconnect,
-  ])
+  const [isConnecting, isConnected, connection, connect, disconnect, refreshCollections, isLoading] = useStore(
+    state => [
+      state.isConnecting,
+      state.isConnected,
+      state.connection,
+      state.connect,
+      state.disconnect,
+      state.refreshCollections,
+      state.isLoading,
+    ]
+  )
 
   useEffect(() => {
     // add class to html to indicate platform
     const html = document.querySelector('html')
     html.classList.add(process.platform)
 
-    console.log('connecting...')
+    console.info('connecting...')
     connect(connection.apiKey, connection.nodes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -49,17 +52,21 @@ export default function App() {
 
   if (isConnecting) {
     return (
-      <WindowWrapper>
-        <Loading />
-      </WindowWrapper>
+      <div className="window">
+        <div className="centered">
+          <Loading />
+        </div>
+      </div>
     )
   }
 
   if (!isConnected) {
     return (
-      <WindowWrapper>
-        <Connection />
-      </WindowWrapper>
+      <div className="window">
+        <div className="centered">
+          <Connection />
+        </div>
+      </div>
     )
   }
 
@@ -68,65 +75,62 @@ export default function App() {
       <HashRouter>
         <TitleBar>Typeclient</TitleBar>
         <div className="inner">
-          <div className="flex gap-1">
-            <Link to="/">
-              <Button icon={<VscDashboard />} text="Dashboard" />
-            </Link>
-            <Link to="/search">
-              <Button icon={<VscSearch />} text="Search" />
-            </Link>
-            <Link to="/collections">
-              <Button icon={<VscVersions />} text="Collections" />
-            </Link>
-            <Link to="/documents">
-              <Button icon={<VscFile />} text="Documents" />
-            </Link>
-            <Link to="/keys">
-              <Button icon={<VscKey />} text="API Keys" />
-            </Link>
-            <Link to="/synonyms">
-              <Button icon={<VscMirror />} text="Synonyms" />
-            </Link>
-            <Link to="/curation">
-              <Button icon={<VscBeaker />} text="Curations" />
-            </Link>
-            <Link to="/test_editor">
-              <Button icon={<VscTerminal />} text="Editor" />
-            </Link>
-            <Link to="/connection">
-              <Button icon={<VscGlobe />} text="Connection" />
-            </Link>
-            <Link to="/settings">
-              <Button icon={<VscSettingsGear />} text="Settings" />
-            </Link>
-            <Button icon={<VscSignOut />} className="destructive" text="Disconnect" onClick={() => disconnect(true)} />
+          {/* sidebar */}
+          <div className="sidebar relative">
+            {/* <div className="toolbar app-drag border-b border-black">
+              <div className="traffic-light-padding">I'm a toolbar</div>
+            </div> */}
+            <div className="scroll-container-y">
+              <div className="flex flex-col">
+                <Link to="/">Dashboard</Link>
+                <Link to="/collections">Collections</Link>
+                <Link to="/apikeys">API Keys</Link>
+                <Link to="/aliases">Aliases</Link>
+                <SelectCollection />
+                {/* these routes only work if a collection is selected */}
+                <Link to="/search">Search</Link>
+                <Link to="/documents/create">Documents</Link>
+                <Link to="/schema">Schema</Link>
+                <Link to="/synonyms">Synonyms</Link>
+                <Link to="/curations">Curations</Link>
+                <Link to="/settings">Settings</Link>
+                <button onClick={() => disconnect(false)}>Disconnect</button>
+                <button onClick={() => refreshCollections()}>Refresh</button>
+              </div>
+            </div>
           </div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/connection" element={<Connection />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/collections" element={<Collections />} />
-            <Route path="/collections/create" element={<CreateCollection />} />
-            <Route path="/collection/:name" element={<Collection />} />
-            <Route path="/documents/create" element={<CreateDocument />} />
-            <Route path="/test_editor" element={<TestEditor />} />
-          </Routes>
+          {/* main content */}
+          <div className="main border-l border-black relative">
+            {/* <div className="toolbar app-drag border-b border-black">toolbar space</div> */}
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/apikeys" element={<ApiKeys />} />
+              <Route path="/aliases" element={<Aliases />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/collections/create" element={<CreateCollection />} />
+              <Route path="/collection/:name" element={<Collection />} />
+              <Route path="/documents/create" element={<CreateDocument />} />
+              <Route path="/documents/edit/:id" element={<CreateDocument />} />
+            </Routes>
+          </div>
         </div>
       </HashRouter>
-    </div>
-  )
-}
-
-interface WindowProps {
-  title?: string
-  children: React.ReactNode
-}
-
-const WindowWrapper: FC<WindowProps> = ({ title = 'Typeclient', children }) => {
-  return (
-    <div className="window">
-      <TitleBar>Typeclient</TitleBar>
-      <div className="inner">{children}</div>
+      <Transition
+        appear
+        show={isLoading}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="loading-mask">
+          <Loading text="Importing documents" className="text-secondary-emphasis" />
+        </div>
+      </Transition>
     </div>
   )
 }

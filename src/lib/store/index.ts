@@ -25,13 +25,9 @@ const useStore = create<Store>()(
       name: STORAGE_NAME,
       // exclude non-serializable fields
       partialize: state => {
-        const { connection, collections, currentCollectionName } = state
+        const { client, adapter, isConnected, isConnecting, ...rest } = state
 
-        return {
-          connection,
-          collections,
-          currentCollectionName,
-        }
+        return { ...rest }
       },
       merge: (persisted, current) => {
         const stored = persisted as Store

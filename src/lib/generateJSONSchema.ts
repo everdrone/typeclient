@@ -1,7 +1,7 @@
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema'
-import { CollectionSchema } from 'lib/store/types'
+import { FieldType, CollectionSchema } from 'lib/store/types'
 
-function typesenseTypeToJsonType(type: string): JSONSchema7 {
+function typesenseTypeToJsonType(type: FieldType): JSONSchema7 {
   switch (type) {
     case 'string':
       return {

@@ -15,7 +15,7 @@ function LoadMoreHits({
   const HitComponent = component
 
   return (
-    <div>
+    <div className="scroll-container-y">
       <ul>
         {hits.map((hit: any) => (
           <li key={hit.objectID}>

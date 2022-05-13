@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { VscBracketDot, VscPreview } from 'react-icons/vsc'
+import { useNavigate } from 'react-router-dom'
 
 import Editor, { loader } from '@monaco-editor/react'
 import Monaco from 'monaco-editor'
@@ -38,7 +39,6 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
   //     { name: '', type: 'string', index: true, optional: false, facet: false },
   //   ],
   // })
-  loader.config({ monaco })
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setSchema({ ...schema, name: e.target.value })
@@ -132,8 +132,6 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
     }
   }
 
-  console.log(getAllFieldsOfType(schema as CollectionSchema, ['int32', 'float']))
-
   return (
     <div>
       {errors.name && <p className="text-danger-fg">{errors.name}</p>}
@@ -203,13 +201,19 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
 }
 
 export default function CreateSchema() {
-  const [prefersJSONMode, setPrefersJSONMode] = useStore(state => [state.prefersJSONMode, state.setPrefersJSONMode])
+  const [prefersJSONMode, setPrefersJSONMode, createCollection] = useStore(state => [
+    state.prefersJSONMode,
+    state.setPrefersJSONMode,
+    state.createCollection,
+  ])
 
   const [rawValue, setRawValue] = useState<string>('')
   const [schema, setSchema] = useState<CollectionCreateSchema>({
     name: '',
     fields: [{ name: '', type: 'string', index: true, optional: false, facet: false }],
   })
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (prefersJSONMode) {
@@ -228,44 +232,55 @@ export default function CreateSchema() {
     }
   }, [schema])
 
+  loader.config({ monaco })
+
   const editor = (
-    <div className="h-full">
-      <Editor
-        theme="theme"
-        height="50%"
-        beforeMount={monaco => {
-          monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-            validate: true,
-            allowComments: false,
-            schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
-          })
-          monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
-        }}
-        defaultLanguage="json"
-        defaultValue={JSON.stringify(schema, null, 2)}
-        options={{ minimap: { enabled: false } }}
-        onChange={value => setRawValue(value)}
-        value={rawValue}
-      />
-      <button
-        onClick={() => {
-          // FIXME: validate schema and set errors at the bottom
-        }}
-      >
-        Create
-      </button>
-    </div>
+    <>
+      <div id="middle" className="grow">
+        <Editor
+          theme="theme"
+          height="100%"
+          beforeMount={monaco => {
+            monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+              validate: true,
+              allowComments: false,
+              schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
+            })
+            monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
+          }}
+          defaultLanguage="json"
+          defaultValue={JSON.stringify(schema, null, 2)}
+          options={{ minimap: { enabled: false }, formatOnPaste: true }}
+          onChange={value => setRawValue(value)}
+          value={rawValue}
+        />
+      </div>
+      <div id="bottom" className="border-t border-black">
+        <button
+          onClick={() => {
+            // FIXME: validate schema and set errors at the bottom
+            createCollection(schema).then(res => (res ? navigate('/search') : alert('FIXME: implement me')))
+          }}
+        >
+          Create
+        </button>
+      </div>
+    </>
   )
   const form = <CreateCollectionForm schema={schema} setSchema={setSchema} />
 
   return (
-    <div>
-      <Button
-        icon={prefersJSONMode ? <VscPreview /> : <VscBracketDot />}
-        text={prefersJSONMode ? 'Form' : 'JSON'}
-        onClick={() => setPrefersJSONMode(!prefersJSONMode)}
-      />
-      {prefersJSONMode ? editor : form}
-    </div>
+    <>
+      <div id="top">
+        <Button
+          icon={prefersJSONMode ? <VscPreview /> : <VscBracketDot />}
+          text={prefersJSONMode ? 'Form' : 'JSON'}
+          onClick={() => setPrefersJSONMode(!prefersJSONMode)}
+        />
+      </div>
+      <div id="middle" className="grow w-full flex flex-col">
+        {prefersJSONMode ? editor : form}
+      </div>
+    </>
   )
 }

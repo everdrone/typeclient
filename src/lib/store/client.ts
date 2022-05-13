@@ -20,10 +20,7 @@ export interface ClientSlice {
   healthCheck: () => Promise<boolean>
 }
 
-const createClientSlice = (
-  set: SetState<Store>,
-  get: GetState<Store>
-): ClientSlice => ({
+const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSlice => ({
   client: null,
   adapter: null,
   isConnected: false,
@@ -43,7 +40,7 @@ const createClientSlice = (
 
     // create the client
     try {
-      client = new Client({ apiKey, nodes })
+      client = new Client({ apiKey, nodes, cacheSearchResultsForSeconds: 0 })
     } catch (err) {
       console.error(err)
     }
@@ -80,16 +77,12 @@ const createClientSlice = (
         // create the adapter options
         // TODO: check if there are collections saved with valid options first!
         const additionalSearchParameters: SearchParametersWithQueryBy = {
-          query_by: getAllFieldsOfType(currentCollection.schema, [
-            'string',
-            'string[]',
-          ])
+          query_by: getAllFieldsOfType(currentCollection.schema, ['string', 'string[]'])
             .map(field => field.name)
             .join(','),
         }
 
-        collections[currentCollectionName].searchParameters =
-          additionalSearchParameters
+        collections[currentCollectionName].searchParameters = additionalSearchParameters
 
         // create the adapter
         try {
@@ -97,6 +90,7 @@ const createClientSlice = (
             server: {
               apiKey,
               nodes,
+              cacheSearchResultsForSeconds: 0,
             },
             // we do not want the parameters to be mutable, copy the object!
             additionalSearchParameters: { ...additionalSearchParameters },
@@ -128,9 +122,7 @@ const createClientSlice = (
       isConnecting: false,
       currentCollectionName: null,
       collections: {},
-      connection: preserveEndpoint
-        ? prev.connection
-        : { nodes: [], apiKey: '' },
+      connection: preserveEndpoint ? prev.connection : { nodes: [], apiKey: '' },
     }))
   },
   healthCheck: async function () {

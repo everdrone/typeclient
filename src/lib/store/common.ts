@@ -1,13 +1,7 @@
 import deepEqual from 'fast-deep-equal'
 import deepDiff from 'deep-diff'
 
-import {
-  CollectionSchema,
-  SearchParametersWithQueryBy,
-  Client,
-  ComponentName,
-  FieldType,
-} from './types'
+import { CollectionSchema, SearchParametersWithQueryBy, Client, ComponentName, FieldType } from './types'
 
 import { ClientSlice } from './client'
 import { CollectionSlice } from './collection'
@@ -45,80 +39,65 @@ export enum DocumentAction {
 // this function fetches the collections from the server, then
 // compares them with the ones in the store, and returns the
 // merges them so that the client is always up to date
-export function refreshCollections(
+export async function refreshCollections(
   fromClient: Client | null,
   oldCollections: ExtendedCollectionsMap
-): ExtendedCollectionsMap {
+): Promise<ExtendedCollectionsMap> {
   let client = getClientOrThrow(fromClient)
 
   const freshCollections: ExtendedCollectionsMap = {}
 
-  client
-    .collections()
-    .retrieve()
-    .then(newCollections => {
-      // compare and merge
-      newCollections.map(newCollection => {
-        if (!(newCollection.name in oldCollections)) {
-          // new collection not preset in the store, create it
-          freshCollections[newCollection.name] = {
-            schema: newCollection,
-            searchParameters: {
-              query_by: getAllFieldsOfType(newCollection, [
-                'string',
-                'string[]',
-              ])
-                .map(field => field.name)
-                .join(','),
-            },
-            displayOptions: {
-              component: ComponentName.DEFAULT,
-              map: {},
-            },
-          }
-        }
+  try {
+    const newCollections = await client.collections().retrieve()
 
-        const existingCollection = oldCollections[newCollection.name]
-
-        if (deepEqual(newCollection, existingCollection.schema)) {
-          // is the same, add it as is
-          freshCollections[newCollection.name] = { ...existingCollection }
-        } else {
-          // not the same, reset the configuration
-          // TODO: later we might want to make a nicer merge instead of just resetting
-          freshCollections[newCollection.name] = {
-            schema: newCollection,
-            searchParameters: {
-              query_by: getAllFieldsOfType(newCollection, [
-                'string',
-                'string[]',
-              ])
-                .map(field => field.name)
-                .join(','),
-            },
-            displayOptions: {
-              component: ComponentName.DEFAULT,
-              map: {},
-            },
-          }
+    newCollections.map(newCollection => {
+      if (!(newCollection.name in oldCollections)) {
+        // new collection not preset in the store, create it
+        freshCollections[newCollection.name] = {
+          schema: newCollection,
+          searchParameters: {
+            query_by: getAllFieldsOfType(newCollection, ['string', 'string[]'])
+              .map(field => field.name)
+              .join(','),
+          },
+          displayOptions: {
+            component: ComponentName.DEFAULT,
+            map: {},
+          },
         }
-      })
-    })
-    .catch(err => {
-      // cannot retrieve collections
-      throw err
+      }
+
+      const existingCollection = oldCollections[newCollection.name]
+
+      if (deepEqual(newCollection, existingCollection.schema)) {
+        // is the same, add it as is
+        freshCollections[newCollection.name] = { ...existingCollection }
+      } else {
+        // not the same, reset the configuration
+        // TODO: later we might want to make a nicer merge instead of just resetting
+        freshCollections[newCollection.name] = {
+          schema: newCollection,
+          searchParameters: {
+            query_by: getAllFieldsOfType(newCollection, ['string', 'string[]'])
+              .map(field => field.name)
+              .join(','),
+          },
+          displayOptions: {
+            component: ComponentName.DEFAULT,
+            map: {},
+          },
+        }
+      }
     })
 
-  return freshCollections
+    return freshCollections
+  } catch (err) {
+    throw err
+  }
 }
 
-export function getAllFieldsOfType(
-  collection: CollectionSchema,
-  types: FieldType[]
-) {
-  return collection.fields.filter(
-    (field: any) => field.index && types.includes(field.type) && field.name
-  )
+export function getAllFieldsOfType(collection: CollectionSchema, types: FieldType[]) {
+  return collection.fields.filter((field: any) => field.index && types.includes(field.type) && field.name)
 }
 
 export async function checkConnection(client: Client | null) {
@@ -143,8 +122,4 @@ export function getClientOrThrow(client: Client | null) {
   return client!
 }
 
-export type Store = ClientSlice &
-  CollectionSlice &
-  DocumentSlice &
-  KeySlice &
-  PreferencesSlice
+export type Store = ClientSlice & CollectionSlice & DocumentSlice & KeySlice & PreferencesSlice

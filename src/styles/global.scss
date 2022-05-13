@@ -63,10 +63,10 @@
 }
 
 /* adds border */
-/* .safe-area-top {
+.safe-area-top {
   border-bottom: 1px solid black;
   height: calc(var(--titlebar-height) + 1px);
-} */
+}
 
 /* FIXME: add a 1px border on windows that lays on top of everything (see vscode) */
 .window {
@@ -94,12 +94,61 @@
   }
 
   .inner {
-    padding: 16px;
-    padding-top: 0px;
-    height: 100%;
-    overflow-y: auto;
     /* the inset canvas window color (darker) */
     /* background-color: #010409; */
-    @apply flex flex-col;
+    display: flex;
+    flex-grow: 1;
   }
+}
+
+.sidebar {
+  width: 270px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.traffic-light-padding {
+  padding-left: 70px;
+}
+
+.toolbar {
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.scroll-container-y {
+  overflow-y: auto;
+}
+
+.scroll-container-x {
+  overflow-x: auto;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loading-mask {
+  position: absolute;
+  top: calc(var(--titlebar-height) + 1px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

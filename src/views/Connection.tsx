@@ -7,6 +7,7 @@ import Button from 'components/Button'
 
 import 'styles/connection.scss'
 import { VscAdd, VscTrash } from 'react-icons/vsc'
+import { useNavigate } from 'react-router-dom'
 
 interface ErrorMapping {
   apiKey: string | null

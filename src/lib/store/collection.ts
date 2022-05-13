@@ -8,26 +8,22 @@ import {
   ComponentName,
 } from './types'
 
-import { getAllFieldsOfType, getClientOrThrow, Store } from './common'
+import { getAllFieldsOfType, getClientOrThrow, Store, refreshCollections } from './common'
 
 export interface CollectionSlice {
   currentCollectionName: string | null
   collections: ExtendedCollectionsMap
   setCurrentCollection: (name?: string) => void
-  createCollection: (
-    schema: CollectionCreateSchema
-  ) => Promise<CollectionSchema | false>
+  createCollection: (schema: CollectionCreateSchema) => Promise<CollectionSchema | false>
   deleteCollection: (name: string) => Promise<CollectionSchema | false>
+  refreshCollections: () => void
 }
 
-const createCollectionSlice = (
-  set: SetState<Store>,
-  get: GetState<Store>
-): CollectionSlice => ({
+const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): CollectionSlice => ({
   currentCollectionName: null,
   collections: {},
-  setCurrentCollection: name => {
-    let client = get().client
+  setCurrentCollection: function (name) {
+    const client = getClientOrThrow(get().client)
     let adapter = get().adapter
     let newCollection: ExtendedCollectionDefinition | null = null
     let collections = get().collections
@@ -76,27 +72,45 @@ const createCollectionSlice = (
     }))
   },
   createCollection: async function (schema: CollectionCreateSchema) {
-    let client = getClientOrThrow(get().client)
+    const client = getClientOrThrow(get().client)
+    let adapter = get().adapter
+    let collections = get().collections
 
     try {
       const result = await client.collections().create(schema)
 
+      const extendedCollection = {
+        schema: result,
+        searchParameters: {
+          query_by: getAllFieldsOfType(result, ['string', 'string[]'])
+            .map(field => field.name)
+            .join(','),
+        },
+        displayOptions: {
+          component: ComponentName.DEFAULT,
+          map: {},
+        },
+      }
+
+      if (!adapter || Object.keys(collections).length === 0) {
+        adapter = new TypesenseInstantsearchAdapter({
+          server: {
+            apiKey: get().connection.apiKey,
+            nodes: get().connection.nodes,
+          },
+          additionalSearchParameters: {
+            // make immutable!
+            ...extendedCollection.searchParameters,
+          },
+        })
+      }
+
       set(prev => ({
+        adapter,
         currentCollectionName: result.name,
         collections: {
           ...prev.collections,
-          [result.name]: {
-            schema: result,
-            searchParameters: {
-              query_by: getAllFieldsOfType(result, ['string', 'string[]'])
-                .map(field => field.name)
-                .join(','),
-            },
-            displayOptions: {
-              component: ComponentName.DEFAULT,
-              map: {},
-            },
-          },
+          [result.name]: { ...extendedCollection },
         },
       }))
 
@@ -107,16 +121,14 @@ const createCollectionSlice = (
     }
   },
   deleteCollection: async function (name: string) {
-    let client = getClientOrThrow(get().client)
+    const client = getClientOrThrow(get().client)
     let currentCollectionName = get().currentCollectionName
 
     try {
       const result = await client.collections(name).delete()
 
       if (currentCollectionName === name) {
-        const availableCollections = Object.keys(get().collections).filter(
-          collectionName => collectionName !== name
-        )
+        const availableCollections = Object.keys(get().collections).filter(collectionName => collectionName !== name)
         if (availableCollections.length > 0) {
           currentCollectionName = availableCollections[0]
         } else {
@@ -137,6 +149,29 @@ const createCollectionSlice = (
       console.error(err)
       return false
     }
+  },
+  refreshCollections: function () {
+    const client = getClientOrThrow(get().client)
+
+    refreshCollections(client, get().collections).then(newCollections => {
+      let currentCollectionName = get().currentCollectionName
+
+      if (!(currentCollectionName in newCollections)) {
+        const availableCollections = Object.keys(newCollections)
+        if (availableCollections.length > 0) {
+          currentCollectionName = availableCollections[0]
+        } else {
+          currentCollectionName = null
+        }
+      }
+
+      console.info('refreshing collections')
+
+      set(() => ({
+        collections: { ...(newCollections as ExtendedCollectionsMap) },
+        currentCollectionName,
+      }))
+    })
   },
 })
 

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import 'styles/index.css'
-import 'styles/general.css'
-import 'styles/misc.css'
+import 'styles/index.scss'
+import 'styles/global.scss'
+import 'styles/misc.scss'
 
 import Logo from './components/Logo'
 
@@ -39,54 +39,13 @@ import {
 } from 'react-icons/vsc'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import TitleBar from 'components/TitleBar'
 
 export default function App() {
   return (
     <div className="window">
-      <div className="safe-area-top app-drag">Typeclient</div>
-      <div className="inner">
-        <Logo />
-        <p>settings</p>
-        <div className="text-3xl">
-          <VscSettingsGear />
-          <VscSettings />
-          <VscSearch />
-          <VscRemote />
-          <VscJson />
-          <VscKey />
-          <VscLayers />
-          <VscVersions />
-          <VscListTree />
-          <VscTerminal />
-          <VscDatabase />
-          <VscCombine />
-          <VscBeaker />
-          <VscMirror />
-          <VscSymbolClass />
-          <VscTag />
-          <VscTrash />
-          <VscVerified />
-          <VscUngroupByRefType />
-          <VscSave />
-          <VscRootFolderOpened />
-          <VscLoading className="animate-spin" />
-        </div>
-        <p>health</p>
-        <div className="text-3xl">
-          <VscDashboard />
-          <VscPulse />
-        </div>
-        <p>connection</p>
-        <div className="text-3xl">
-          <VscGlobe />
-          <VscPlug />
-        </div>
-        <p>settings</p>
-        <div className="text-3xl">
-          <VscPin />
-          <VscReferences />
-        </div>
-      </div>
+      <TitleBar>Typeclient</TitleBar>
+      <div className="inner"></div>
     </div>
   )
 }

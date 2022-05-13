@@ -8,10 +8,13 @@ import useStore from 'lib/store'
 import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/createCollection.json'
 
-const editorOptions = {
+const editorOptions: Monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: {
     enabled: false,
   },
+  formatOnPaste: true,
+  scrollBeyondLastLine: false,
+  // contextmenu: false,
   // readOnly: true,
 }
 
@@ -21,9 +24,7 @@ function Loading() {
 
 const defaultObject = {
   name: '',
-  fields: [
-    { name: '', type: 'string', index: true, optional: false, facet: false },
-  ],
+  fields: [{ name: '', type: 'string', index: true, optional: false, facet: false }],
 }
 
 export default function CodeEditor() {
@@ -40,21 +41,14 @@ export default function CodeEditor() {
           monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
             allowComments: false,
-            schemas: [
-              { fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema },
-            ],
+            schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
           })
-          monaco.editor.defineTheme(
-            'theme',
-            theme as Monaco.editor.IStandaloneThemeData
-          )
+          monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
         }}
         onMount={(editor, monaco) => {
           // disables the command palette shortcut
           // editor.addCommand(monaco.KeyCode.F1, () => {})
-          editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () =>
-            alert('implement me')
-          )
+          editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => alert('implement me'))
         }}
         height="100%"
         defaultLanguage="json"

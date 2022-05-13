@@ -1,15 +1,13 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
 
 import useStore from 'lib/store'
 
 export default function SelectCollection() {
-  const [collections, currentCollectionName, setCurrentCollection] = useStore(
-    state => [
-      state.collections,
-      state.currentCollectionName,
-      state.setCurrentCollection,
-    ]
-  )
+  const [collections, currentCollectionName, setCurrentCollection] = useStore(state => [
+    state.collections,
+    state.currentCollectionName,
+    state.setCurrentCollection,
+  ])
 
   function handleChange(e: ChangeEvent<HTMLSelectElement>) {
     setCurrentCollection(e.target.value)
@@ -19,11 +17,7 @@ export default function SelectCollection() {
 
   return (
     <select
-      value={
-        currentCollectionName
-          ? collections[currentCollectionName].schema.name
-          : collections[0].schema.name
-      }
+      value={currentCollectionName ? collections[currentCollectionName].schema.name : collections[0].schema.name}
       onChange={handleChange}
     >
       {Object.keys(collections).map(name => (
