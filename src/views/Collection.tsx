@@ -36,17 +36,19 @@ export default function Collection() {
           <Button className="destructive" text="Drop collection" />
         </Link>
       </div>
-      <div id="middle" className="grow w-full flex flex-col">
-        <Editor
-          theme="theme"
-          height="100%"
-          beforeMount={monaco => {
-            monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
-          }}
-          defaultLanguage="json"
-          defaultValue={JSON.stringify(collection.schema, null, 2)}
-          options={{ readOnly: true, minimap: { enabled: false } }}
-        />
+      <div id="middle" className="grow w-full flex flex-col relative">
+        <div className="absolute inset-0">
+          <Editor
+            theme="theme"
+            height="100%"
+            beforeMount={monaco => {
+              monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
+            }}
+            defaultLanguage="json"
+            defaultValue={JSON.stringify(collection.schema, null, 2)}
+            options={{ readOnly: true, minimap: { enabled: false } }}
+          />
+        </div>
       </div>
     </>
   )

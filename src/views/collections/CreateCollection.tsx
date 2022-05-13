@@ -236,24 +236,26 @@ export default function CreateSchema() {
 
   const editor = (
     <>
-      <div id="middle" className="grow">
-        <Editor
-          theme="theme"
-          height="100%"
-          beforeMount={monaco => {
-            monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-              validate: true,
-              allowComments: false,
-              schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
-            })
-            monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
-          }}
-          defaultLanguage="json"
-          defaultValue={JSON.stringify(schema, null, 2)}
-          options={{ minimap: { enabled: false }, formatOnPaste: true }}
-          onChange={value => setRawValue(value)}
-          value={rawValue}
-        />
+      <div id="middle" className="grow relative">
+        <div className="absolute inset-0">
+          <Editor
+            theme="theme"
+            height="100%"
+            beforeMount={monaco => {
+              monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                validate: true,
+                allowComments: false,
+                schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
+              })
+              monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
+            }}
+            defaultLanguage="json"
+            defaultValue={JSON.stringify(schema, null, 2)}
+            options={{ minimap: { enabled: false }, formatOnPaste: true }}
+            onChange={value => setRawValue(value)}
+            value={rawValue}
+          />
+        </div>
       </div>
       <div id="bottom" className="border-t border-black">
         <button

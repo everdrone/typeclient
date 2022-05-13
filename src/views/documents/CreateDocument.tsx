@@ -79,31 +79,34 @@ export default function CreateDocument() {
 
   return (
     <>
-      <div id="middle" className="grow">
-        <Editor
-          theme="theme"
-          height="100%"
-          beforeMount={monaco => {
-            monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-              validate: true,
-              allowComments: false,
-              schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
-            })
-            monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
-          }}
-          defaultLanguage="json"
-          defaultValue={document}
-          value={document}
-          options={{
-            formatOnPaste: true,
-            minimap: {
-              enabled: false,
-            },
-          }}
-          onChange={newValue => {
-            setDocument(newValue)
-          }}
-        />
+      <div id="middle" className="grow relative">
+        <div className="absolute inset-0">
+          <Editor
+            theme="theme"
+            height="100%"
+            beforeMount={monaco => {
+              monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                validate: true,
+                allowComments: false,
+                schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
+              })
+              monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
+            }}
+            defaultLanguage="json"
+            defaultValue={document}
+            value={document}
+            options={{
+              formatOnPaste: true,
+              automaticLayout: true,
+              minimap: {
+                enabled: false,
+              },
+            }}
+            onChange={newValue => {
+              setDocument(newValue)
+            }}
+          />
+        </div>
       </div>
       <div id="bottom" className="border-t border-black">
         <select value={action} onChange={e => setAction(e.target.value as DocumentAction)}>
