@@ -9,6 +9,7 @@ import useStore from 'lib/store'
 import Button from 'components/Button'
 
 import theme from 'data/theme.json'
+import { editorOptions } from 'components/CodeEditor'
 
 export default function Collection() {
   const { name } = useParams()
@@ -45,7 +46,7 @@ export default function Collection() {
           }}
           defaultLanguage="json"
           defaultValue={JSON.stringify(collection.schema, null, 2)}
-          options={{ readOnly: true, minimap: { enabled: false } }}
+          options={{ ...editorOptions, readOnly: true }}
         />
       </div>
     </>

@@ -4,6 +4,7 @@ import { Transition } from '@headlessui/react'
 import 'styles/index.scss'
 import 'styles/global.scss'
 import 'styles/misc.scss'
+import 'styles/fonts.scss'
 
 import useStore from 'lib/store'
 

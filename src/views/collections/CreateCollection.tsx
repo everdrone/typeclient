@@ -13,6 +13,7 @@ import jsonSchema from 'data/schema/createCollection.json'
 
 import Button from 'components/Button'
 import { CollectionSchema, CollectionCreateSchema, FieldType } from 'lib/store/types'
+import { editorOptions } from 'components/CodeEditor'
 
 interface FormErrors {
   name: string | null
@@ -250,7 +251,7 @@ export default function CreateSchema() {
           }}
           defaultLanguage="json"
           defaultValue={JSON.stringify(schema, null, 2)}
-          options={{ minimap: { enabled: false }, formatOnPaste: true }}
+          options={editorOptions}
           onChange={value => setRawValue(value)}
           value={rawValue}
         />

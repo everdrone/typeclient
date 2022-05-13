@@ -12,6 +12,7 @@ import { DocumentAction } from 'lib/store/common'
 import theme from 'data/theme.json'
 import generateJSONSchema from 'lib/generateJSONSchema'
 import generateDefaultDocument from 'lib/generateDefaultDocument'
+import { editorOptions } from 'components/CodeEditor'
 
 export default function CreateDocument() {
   const [collections, currentCollectionName, createDocument, retrieveDocument, refreshCollections, setIsLoading] =
@@ -91,15 +92,11 @@ export default function CreateDocument() {
             })
             monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
           }}
+          onMount={() => monaco.editor.remeasureFonts()}
           defaultLanguage="json"
           defaultValue={document}
           value={document}
-          options={{
-            formatOnPaste: true,
-            minimap: {
-              enabled: false,
-            },
-          }}
+          options={editorOptions}
           onChange={newValue => {
             setDocument(newValue)
           }}

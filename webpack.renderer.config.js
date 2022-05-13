@@ -23,6 +23,11 @@ rules.push({
   ],
 })
 
+rules.push({
+  test: /\.(woff|woff2|eot|ttf|otf)$/i,
+  type: 'asset/resource',
+})
+
 module.exports = {
   target: 'electron-renderer',
   module: {

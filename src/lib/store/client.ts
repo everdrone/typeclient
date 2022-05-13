@@ -40,7 +40,7 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
 
     // create the client
     try {
-      client = new Client({ apiKey, nodes, cacheSearchResultsForSeconds: 0 })
+      client = new Client({ apiKey, nodes, cacheSearchResultsForSeconds: 2 })
     } catch (err) {
       console.error(err)
     }
@@ -90,7 +90,7 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
             server: {
               apiKey,
               nodes,
-              cacheSearchResultsForSeconds: 0,
+              cacheSearchResultsForSeconds: 2,
             },
             // we do not want the parameters to be mutable, copy the object!
             additionalSearchParameters: { ...additionalSearchParameters },

@@ -8,15 +8,7 @@ import useStore from 'lib/store'
 import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/createCollection.json'
 
-const editorOptions: Monaco.editor.IStandaloneEditorConstructionOptions = {
-  minimap: {
-    enabled: false,
-  },
-  formatOnPaste: true,
-  scrollBeyondLastLine: false,
-  // contextmenu: false,
-  // readOnly: true,
-}
+import { editorOptions } from 'components/CodeEditor'
 
 function Loading() {
   return <div className="bg-black"></div>
@@ -53,7 +45,7 @@ export default function CodeEditor() {
         height="100%"
         defaultLanguage="json"
         defaultValue={JSON.stringify(defaultObject, null, 2)}
-        options={editorOptions}
+        options={{ ...editorOptions, scrollBeyondLastLine: false }}
         // onChange={(newValue, event) => {
         //   console.log(newValue)
         // }}
