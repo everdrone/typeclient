@@ -132,6 +132,7 @@ export default function App() {
           <Loading text="Importing documents" className="text-secondary-emphasis" />
         </div>
       </Transition>
+      <div className="window-overlay"></div>
     </div>
   )
 }
