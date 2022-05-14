@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
 
+import { Allotment } from 'allotment'
+import 'allotment/dist/style.css'
+
 import 'styles/index.scss'
 import 'styles/global.scss'
 import 'styles/misc.scss'
@@ -78,33 +81,39 @@ export default function App() {
       <HashRouter>
         <TitleBar>Typeclient</TitleBar>
         <div className="inner">
-          {/* sidebar */}
-          <div className="sidebar relative">
-            {/* <div className="toolbar app-drag border-b border-black">
+          <Allotment defaultSizes={[270]} proportionalLayout={false}>
+            <Allotment.Pane minSize={200} maxSize={350} preferredSize={270}>
+              {/* sidebar */}
+              <div className="relative">
+                {/* <div className="toolbar app-drag border-b border-black">
               <div className="traffic-light-padding">I'm a toolbar</div>
             </div> */}
-            <div className="scroll-container-y">
-              <div className="flex flex-col">
-                <Sidebar />
+                <div className="scroll-container-y">
+                  <div className="flex flex-col">
+                    <Sidebar />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          {/* main content */}
-          <div className="main-content border-l border-black relative">
-            {/* <div className="toolbar app-drag border-b border-black">toolbar space</div> */}
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/apikeys" element={<ApiKeys />} />
-              <Route path="/aliases" element={<Aliases />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/collections" element={<Collections />} />
-              <Route path="/collections/create" element={<CreateCollection />} />
-              <Route path="/collection/:name" element={<Collection />} />
-              <Route path="/documents/create" element={<CreateDocument />} />
-              <Route path="/documents/edit/:id" element={<CreateDocument />} />
-            </Routes>
-          </div>
+            </Allotment.Pane>
+            <Allotment.Pane>
+              {/* main content */}
+              <div className="main-content">
+                {/* <div className="toolbar app-drag border-b border-black">toolbar space</div> */}
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/apikeys" element={<ApiKeys />} />
+                  <Route path="/aliases" element={<Aliases />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/collections" element={<Collections />} />
+                  <Route path="/collections/create" element={<CreateCollection />} />
+                  <Route path="/collection/:name" element={<Collection />} />
+                  <Route path="/documents/create" element={<CreateDocument />} />
+                  <Route path="/documents/edit/:id" element={<CreateDocument />} />
+                </Routes>
+              </div>
+            </Allotment.Pane>
+          </Allotment>
         </div>
       </HashRouter>
       <Transition
