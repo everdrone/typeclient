@@ -8,7 +8,14 @@ import {
   ComponentName,
 } from './types'
 
-import { getAllFieldsOfType, getClientOrThrow, Store, refreshCollections } from './common'
+import {
+  getAllFieldsOfType,
+  getClientOrThrow,
+  Store,
+  refreshCollections,
+  connectionTimeoutSeconds,
+  cacheSearchResultsForSeconds,
+} from './common'
 
 export interface CollectionSlice {
   currentCollectionName: string | null
@@ -57,6 +64,8 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
       server: {
         apiKey: get().connection.apiKey,
         nodes: get().connection.nodes,
+        connectionTimeoutSeconds,
+        cacheSearchResultsForSeconds,
       },
       additionalSearchParameters: {
         // make immutable!
@@ -97,6 +106,8 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
           server: {
             apiKey: get().connection.apiKey,
             nodes: get().connection.nodes,
+            connectionTimeoutSeconds,
+            cacheSearchResultsForSeconds,
           },
           additionalSearchParameters: {
             // make immutable!

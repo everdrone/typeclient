@@ -7,7 +7,13 @@ import {
   SearchParametersWithQueryBy,
 } from './types'
 
-import { Store, checkConnection, getAllFieldsOfType } from './common'
+import {
+  Store,
+  checkConnection,
+  getAllFieldsOfType,
+  connectionTimeoutSeconds,
+  cacheSearchResultsForSeconds,
+} from './common'
 
 export interface ClientSlice {
   client: Client | null
@@ -40,7 +46,7 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
 
     // create the client
     try {
-      client = new Client({ apiKey, nodes, cacheSearchResultsForSeconds: 2 })
+      client = new Client({ apiKey, nodes, cacheSearchResultsForSeconds, connectionTimeoutSeconds })
     } catch (err) {
       console.error(err)
     }
@@ -90,7 +96,8 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
             server: {
               apiKey,
               nodes,
-              cacheSearchResultsForSeconds: 2,
+              cacheSearchResultsForSeconds,
+              connectionTimeoutSeconds,
             },
             // we do not want the parameters to be mutable, copy the object!
             additionalSearchParameters: { ...additionalSearchParameters },

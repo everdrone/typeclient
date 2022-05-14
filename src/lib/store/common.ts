@@ -9,6 +9,9 @@ import { DocumentSlice } from './document'
 import { KeySlice } from './key'
 import { PreferencesSlice } from './preferences'
 
+export const connectionTimeoutSeconds = 5
+export const cacheSearchResultsForSeconds = 2
+
 export interface DisplayOptions {
   component: string
   map: {

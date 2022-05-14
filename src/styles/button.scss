@@ -26,8 +26,9 @@
     @apply bg-primary-hover;
   }
 
+  &.disabled,
   &:disabled {
-    @apply text-primary-muted;
+    @apply text-primary-subtle;
 
     :hover {
       @apply bg-transparent;

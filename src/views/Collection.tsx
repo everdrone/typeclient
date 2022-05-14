@@ -6,7 +6,7 @@ import Monaco from 'monaco-editor'
 import * as monaco from 'monaco-editor'
 
 import useStore from 'lib/store'
-import Button from 'components/Button'
+import Button, { LinkButton } from 'components/Button'
 
 import theme from 'data/theme.json'
 import { editorOptions } from 'components/CodeEditor'
@@ -32,10 +32,8 @@ export default function Collection() {
   return (
     <>
       <div id="top">
-        <Link to="/documents/create">
-          <Button text="Add documents" />
-          <Button className="destructive" text="Drop collection" />
-        </Link>
+        <LinkButton to="/documents/create" text="Add documents" />
+        <Button className="destructive" text="Drop collection" onClick={() => alert('FIXME: implement me!')} />
       </div>
       <div id="middle" className="grow w-full flex flex-col">
         <Editor

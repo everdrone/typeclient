@@ -15,15 +15,23 @@ import generateDefaultDocument from 'lib/generateDefaultDocument'
 import { editorOptions } from 'components/CodeEditor'
 
 export default function CreateDocument() {
-  const [collections, currentCollectionName, createDocument, retrieveDocument, refreshCollections, setIsLoading] =
-    useStore(state => [
-      state.collections,
-      state.currentCollectionName,
-      state.createDocument,
-      state.retrieveDocument,
-      state.refreshCollections,
-      state.setIsLoading,
-    ])
+  const [
+    collections,
+    currentCollectionName,
+    createDocument,
+    retrieveDocument,
+    refreshCollections,
+    setIsLoading,
+    setCurrentCollection,
+  ] = useStore(state => [
+    state.collections,
+    state.currentCollectionName,
+    state.createDocument,
+    state.retrieveDocument,
+    state.refreshCollections,
+    state.setIsLoading,
+    state.setCurrentCollection,
+  ])
 
   const [error, setError] = useState<string>()
   const [document, setDocument] = useState<string>('')
@@ -47,6 +55,7 @@ export default function CreateDocument() {
           // all is good
           console.log(`imported ${data.documents.length} documents`)
           refreshCollections()
+          setCurrentCollection(currentCollectionName)
           setIsLoading(false)
           navigate('/search')
         })

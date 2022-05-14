@@ -24,20 +24,16 @@ import {
 
 import { HashRouter, Routes, Route, Link } from 'react-router-dom'
 import TitleBar from 'components/TitleBar'
-import SelectCollection from 'components/SelectCollection'
+import Sidebar from 'components/Sidebar'
 
 export default function App() {
-  const [isConnecting, isConnected, connection, connect, disconnect, refreshCollections, isLoading] = useStore(
-    state => [
-      state.isConnecting,
-      state.isConnected,
-      state.connection,
-      state.connect,
-      state.disconnect,
-      state.refreshCollections,
-      state.isLoading,
-    ]
-  )
+  const [isConnecting, isConnected, connection, connect, isLoading] = useStore(state => [
+    state.isConnecting,
+    state.isConnected,
+    state.connection,
+    state.connect,
+    state.isLoading,
+  ])
 
   useEffect(() => {
     // add class to html to indicate platform
@@ -83,20 +79,7 @@ export default function App() {
             </div> */}
             <div className="scroll-container-y">
               <div className="flex flex-col">
-                <Link to="/">Dashboard</Link>
-                <Link to="/collections">Collections</Link>
-                <Link to="/apikeys">API Keys</Link>
-                <Link to="/aliases">Aliases</Link>
-                <SelectCollection />
-                {/* these routes only work if a collection is selected */}
-                <Link to="/search">Search</Link>
-                <Link to="/documents/create">Documents</Link>
-                <Link to="/schema">Schema</Link>
-                <Link to="/synonyms">Synonyms</Link>
-                <Link to="/curations">Curations</Link>
-                <Link to="/settings">Settings</Link>
-                <button onClick={() => disconnect(false)}>Disconnect</button>
-                <button onClick={() => refreshCollections()}>Refresh</button>
+                <Sidebar />
               </div>
             </div>
           </div>
