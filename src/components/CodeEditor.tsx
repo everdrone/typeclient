@@ -20,6 +20,7 @@ export const editorOptions: Monaco.editor.IStandaloneEditorConstructionOptions =
   copyWithSyntaxHighlighting: false,
   codeLens: false,
   wordWrap: 'on',
+  renderLineHighlight: 'all',
 }
 
 export default function CodeEditor(editorProps: EditorProps) {

@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import useStore from 'lib/store'
-import { DocumentAction } from 'lib/store/common'
+import { DocumentAction } from 'lib/store/types'
 
 import theme from 'data/theme.json'
 import generateJSONSchema from 'lib/generateJSONSchema'

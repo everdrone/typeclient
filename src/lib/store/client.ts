@@ -59,7 +59,7 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
       client = client!
 
       // update collections
-      let serverCollections = await client!.collections().retrieve()
+      const serverCollections = await client!.collections().retrieve()
       collections = serverCollections.reduce(
         (acc, val) => ({
           ...acc,
@@ -88,7 +88,10 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
             .join(','),
         }
 
+        const locationFields = getAllFieldsOfType(currentCollection.schema, ['geopoint'])
+
         collections[currentCollectionName].searchParameters = additionalSearchParameters
+        collections[currentCollectionName].geoLocationField = locationFields.length > 0 ? locationFields[0].name : null
 
         // create the adapter
         try {
@@ -99,6 +102,7 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
               cacheSearchResultsForSeconds,
               connectionTimeoutSeconds,
             },
+            geoLocationField: collections[currentCollectionName].geoLocationField,
             // we do not want the parameters to be mutable, copy the object!
             additionalSearchParameters: { ...additionalSearchParameters },
           })

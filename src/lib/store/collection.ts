@@ -6,6 +6,8 @@ import {
   ExtendedCollectionDefinition,
   CollectionCreateSchema,
   ComponentName,
+  SearchParametersWithQueryBy,
+  SearchParametersOptionalQueryBy,
 } from './types'
 
 import {
@@ -24,6 +26,8 @@ export interface CollectionSlice {
   createCollection: (schema: CollectionCreateSchema) => Promise<CollectionSchema | false>
   deleteCollection: (name: string) => Promise<CollectionSchema | false>
   refreshCollections: () => void
+  setGeoLocationFieldName: (name: string) => void
+  setAdditionalSearchParameters: (params: SearchParametersOptionalQueryBy, merge?: boolean) => void
 }
 
 const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): CollectionSlice => ({
@@ -31,9 +35,9 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
   collections: {},
   setCurrentCollection: function (name) {
     const client = getClientOrThrow(get().client)
+    const collections = get().collections
     let adapter = get().adapter
     let newCollection: ExtendedCollectionDefinition | null = null
-    let collections = get().collections
 
     // set null to reset instantsearch UI
     set(() => ({
@@ -60,6 +64,9 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
         .join(','),
     }
 
+    const locationFields = getAllFieldsOfType(newCollection.schema, ['geopoint'])
+    collections[newCollection.schema.name].geoLocationField = locationFields.length > 0 ? locationFields[0].name : null
+
     adapter = new TypesenseInstantsearchAdapter({
       server: {
         apiKey: get().connection.apiKey,
@@ -67,6 +74,7 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
         connectionTimeoutSeconds,
         cacheSearchResultsForSeconds,
       },
+      geoLocationField: newCollection.geoLocationField,
       additionalSearchParameters: {
         // make immutable!
         ...collections[newCollection.schema.name].searchParameters,
@@ -82,19 +90,22 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
   },
   createCollection: async function (schema: CollectionCreateSchema) {
     const client = getClientOrThrow(get().client)
+    const collections = get().collections
     let adapter = get().adapter
-    let collections = get().collections
 
     try {
       const result = await client.collections().create(schema)
 
-      const extendedCollection = {
+      const locationFields = getAllFieldsOfType(result, ['geopoint'])
+
+      const extendedCollection: ExtendedCollectionDefinition = {
         schema: result,
         searchParameters: {
           query_by: getAllFieldsOfType(result, ['string', 'string[]'])
             .map(field => field.name)
             .join(','),
         },
+        geoLocationField: locationFields.length > 0 ? locationFields[0].name : null,
         displayOptions: {
           component: ComponentName.DEFAULT,
           map: {},
@@ -109,6 +120,7 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
             connectionTimeoutSeconds,
             cacheSearchResultsForSeconds,
           },
+          geoLocationField: extendedCollection.geoLocationField,
           additionalSearchParameters: {
             // make immutable!
             ...extendedCollection.searchParameters,
@@ -183,6 +195,90 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
         currentCollectionName,
       }))
     })
+  },
+  setGeoLocationFieldName: function (name: string) {
+    const currentCollectionName = get().currentCollectionName
+    const collections = get().collections
+
+    let adapter = get().adapter
+
+    set(() => ({
+      adapter: null,
+    }))
+
+    if (currentCollectionName) {
+      const extendedCollection = collections[currentCollectionName]
+
+      adapter = new TypesenseInstantsearchAdapter({
+        server: {
+          apiKey: get().connection.apiKey,
+          nodes: get().connection.nodes,
+          connectionTimeoutSeconds,
+          cacheSearchResultsForSeconds,
+        },
+        geoLocationField: name,
+        additionalSearchParameters: {
+          // make immutable!
+          ...extendedCollection.searchParameters,
+        },
+      })
+
+      set(() => ({
+        adapter,
+      }))
+    }
+  },
+  setAdditionalSearchParameters: function (params, merge = true) {
+    const currentCollectionName = get().currentCollectionName
+    const collections = get().collections
+
+    let adapter = get().adapter
+
+    set(() => ({
+      adapter: null,
+    }))
+
+    if (currentCollectionName) {
+      const extendedCollection = collections[currentCollectionName]
+
+      let newAdditionalSearchParameters: SearchParametersWithQueryBy
+      if (merge) {
+        newAdditionalSearchParameters = {
+          ...extendedCollection.searchParameters,
+          ...params,
+        }
+      } else {
+        newAdditionalSearchParameters = {
+          query_by: extendedCollection.searchParameters.query_by,
+          ...params,
+        }
+      }
+
+      adapter = new TypesenseInstantsearchAdapter({
+        server: {
+          apiKey: get().connection.apiKey,
+          nodes: get().connection.nodes,
+          connectionTimeoutSeconds,
+          cacheSearchResultsForSeconds,
+        },
+        geoLocationField: extendedCollection.geoLocationField,
+        additionalSearchParameters: {
+          // make immutable!
+          ...newAdditionalSearchParameters,
+        },
+      })
+
+      set(() => ({
+        adapter,
+        collections: {
+          ...collections,
+          [currentCollectionName]: {
+            ...extendedCollection,
+            searchParameters: newAdditionalSearchParameters,
+          },
+        },
+      }))
+    }
   },
 })
 

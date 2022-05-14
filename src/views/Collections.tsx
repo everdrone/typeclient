@@ -1,16 +1,21 @@
 import React, { useEffect } from 'react'
 import { ipcRenderer } from 'electron'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
+import { VscTrash } from 'react-icons/vsc'
 
 import Button from 'components/Button'
 import useStore from 'lib/store'
 
 export default function ListCollections() {
-  const [collections, deleteCollection, refreshCollections] = useStore(state => [
+  const [collections, deleteCollection, refreshCollections, setCurrentCollection] = useStore(state => [
     state.collections,
     state.deleteCollection,
     state.refreshCollections,
+    state.setCurrentCollection,
   ])
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     ipcRenderer.on('deleteCollection', (event, data) => {
@@ -28,18 +33,29 @@ export default function ListCollections() {
 
   return (
     <div>
-      <ul>
+      <ul className="grid grid-cols-12 gap-4 p-4">
         {Object.keys(collections).map(name => (
-          <li key={name}>
+          <li key={name} className="col-span-4 2xl:col-span-3 bg-canvas-overlay p-4">
             <p>{name}</p>
-            <Link to={`/collection/${name}`}>
+            <button
+              onClick={() => {
+                setCurrentCollection(name)
+                navigate('/documents/create')
+              }}
+            >
               <p>documents: {collections[name].schema.num_documents}</p>
+            </button>
+            <Link to={`/collection/${name}`}>
+              <p>fields: {collections[name].schema.fields.length}</p>
+              <p>shards: {collections[name].schema.num_memory_shards}</p>
+              <p>created: {collections[name].schema.created_at}</p>
             </Link>
-            <p>fields: {collections[name].schema.fields.length}</p>
-            <p>shards: {collections[name].schema.num_memory_shards}</p>
-            <p>created: {collections[name].schema.created_at}</p>
-            <Button onClick={() => handleDeleteCollection(name)} text="Dump" />
-            <hr />
+            <Button
+              onClick={() => handleDeleteCollection(name)}
+              className="destructive"
+              icon={<VscTrash />}
+              text="Dump"
+            />
           </li>
         ))}
       </ul>

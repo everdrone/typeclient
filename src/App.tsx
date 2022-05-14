@@ -16,6 +16,7 @@ import {
   ApiKeys,
   Aliases,
   Search,
+  GeoSearch,
   CreateCollection,
   Collection,
   CreateDocument,
@@ -97,6 +98,7 @@ export default function App() {
               <Route path="/apikeys" element={<ApiKeys />} />
               <Route path="/aliases" element={<Aliases />} />
               <Route path="/search" element={<Search />} />
+              <Route path="/geosearch" element={<GeoSearch />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/create" element={<CreateCollection />} />

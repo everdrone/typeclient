@@ -5,6 +5,8 @@ import Editor, { loader } from '@monaco-editor/react'
 import Monaco from 'monaco-editor'
 import * as monaco from 'monaco-editor'
 
+import { VscTrash, VscAdd } from 'react-icons/vsc'
+
 import useStore from 'lib/store'
 import Button, { LinkButton } from 'components/Button'
 
@@ -31,10 +33,6 @@ export default function Collection() {
 
   return (
     <>
-      <div id="top">
-        <LinkButton to="/documents/create" text="Add documents" />
-        <Button className="destructive" text="Drop collection" onClick={() => alert('FIXME: implement me!')} />
-      </div>
       <div id="middle" className="grow w-full flex flex-col">
         <Editor
           theme="theme"
@@ -42,9 +40,19 @@ export default function Collection() {
           beforeMount={monaco => {
             monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
           }}
+          onMount={() => monaco.editor.remeasureFonts()}
           defaultLanguage="json"
           defaultValue={JSON.stringify(collection.schema, null, 2)}
           options={{ ...editorOptions, readOnly: true }}
+        />
+      </div>
+      <div id="bottom" className="flex justify-between border-t border-black p-2">
+        <LinkButton to="/documents/create" icon={<VscAdd />} text="Add documents" />
+        <Button
+          className="destructive"
+          icon={<VscTrash />}
+          text="Drop collection"
+          onClick={() => alert('FIXME: implement me!')}
         />
       </div>
     </>

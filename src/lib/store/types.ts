@@ -5,17 +5,13 @@ export { Client } from 'typesense'
 export { NodeConfiguration } from 'typesense/lib/Typesense/Configuration'
 export { CollectionSchema, FieldType } from 'typesense/lib/Typesense/Collection'
 export { CollectionCreateSchema } from 'typesense/lib/Typesense/Collections'
-export {
-  KeyCreateSchema,
-  KeyDeleteSchema,
-  KeySchema,
-} from 'typesense/lib/Typesense/Key'
+export { KeyCreateSchema, KeyDeleteSchema, KeySchema } from 'typesense/lib/Typesense/Key'
 export { KeysRetrieveSchema } from 'typesense/lib/Typesense/Keys'
 
 export { default as TypesenseInstantsearchAdapter } from 'typesense-instantsearch-adapter'
-export { SearchParametersWithQueryBy } from 'typesense-instantsearch-adapter'
+export { SearchParametersWithQueryBy, SearchParametersOptionalQueryBy } from 'typesense-instantsearch-adapter'
 
-export { ImportResponse } from 'typesense/lib/Typesense/Documents'
+export { ImportResponse, SearchParams } from 'typesense/lib/Typesense/Documents'
 
 export interface DisplayOptions {
   component: ComponentName
@@ -26,6 +22,7 @@ export interface DisplayOptions {
 
 export interface ExtendedCollectionDefinition {
   schema: CollectionSchema
+  geoLocationField: string | null
   searchParameters: SearchParametersWithQueryBy
   displayOptions: DisplayOptions
 }
@@ -36,4 +33,10 @@ export interface ExtendedCollectionsMap {
 
 export enum ComponentName {
   DEFAULT = 'Default',
+}
+
+export enum DocumentAction {
+  CREATE = 'create',
+  UPSERT = 'upsert',
+  UPDATE = 'update',
 }

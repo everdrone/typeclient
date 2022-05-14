@@ -74,8 +74,8 @@ export default function Search() {
         <Stats />
       </div>
       <div id="middle" className="grow relative flex">
-        <div id="refinements" className="relative">
-          <div className="scroll-containter-y">
+        <div className="absolute inset-0 flex overflow-auto">
+          <div id="refinements" className="relative">
             <SortBy items={sortBy} defaultRefinement={currentCollectionName} />
             <ClearRefinements translations={{ reset: 'Clear refinements' }} />
             {boolFacets.map(facet => (
@@ -102,9 +102,7 @@ export default function Search() {
               </div>
             ))}
           </div>
-        </div>
-        <div id="results" className="grow relative">
-          <div className="absolute inset-0 scroll-container-y">
+          <div id="results" className="relative grow">
             <LoadMoreHits component={Tabular} />
           </div>
         </div>

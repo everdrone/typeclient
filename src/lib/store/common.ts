@@ -1,7 +1,7 @@
 import deepEqual from 'fast-deep-equal'
 import deepDiff from 'deep-diff'
 
-import { CollectionSchema, SearchParametersWithQueryBy, Client, ComponentName, FieldType } from './types'
+import { CollectionSchema, ExtendedCollectionsMap, Client, ComponentName, FieldType } from './types'
 
 import { ClientSlice } from './client'
 import { CollectionSlice } from './collection'
@@ -12,33 +12,6 @@ import { PreferencesSlice } from './preferences'
 export const connectionTimeoutSeconds = 5
 export const cacheSearchResultsForSeconds = 2
 
-export interface DisplayOptions {
-  component: string
-  map: {
-    [key: string]: string
-  }
-}
-
-export interface ExtendedCollectionDefinition {
-  schema: CollectionSchema
-  searchParameters: SearchParametersWithQueryBy
-  displayOptions: DisplayOptions
-}
-
-export interface ExtendedCollectionsMap {
-  [key: string]: ExtendedCollectionDefinition
-}
-
-export interface collectionSpecificSearchParameters {
-  [key: string]: SearchParametersWithQueryBy
-}
-
-export enum DocumentAction {
-  CREATE = 'create',
-  UPSERT = 'upsert',
-  UPDATE = 'update',
-}
-
 // this function fetches the collections from the server, then
 // compares them with the ones in the store, and returns the
 // merges them so that the client is always up to date
@@ -46,7 +19,7 @@ export async function refreshCollections(
   fromClient: Client | null,
   oldCollections: ExtendedCollectionsMap
 ): Promise<ExtendedCollectionsMap> {
-  let client = getClientOrThrow(fromClient)
+  const client = getClientOrThrow(fromClient)
 
   const freshCollections: ExtendedCollectionsMap = {}
 
@@ -54,10 +27,14 @@ export async function refreshCollections(
     const newCollections = await client.collections().retrieve()
 
     newCollections.map(newCollection => {
+      const locationFields = getAllFieldsOfType(newCollection, ['geopoint'])
+
       if (!(newCollection.name in oldCollections)) {
-        // new collection not preset in the store, create it
+        // new collection not present in the store, create it
+
         freshCollections[newCollection.name] = {
           schema: newCollection,
+          geoLocationField: locationFields.length > 0 ? locationFields[0].name : null,
           searchParameters: {
             query_by: getAllFieldsOfType(newCollection, ['string', 'string[]'])
               .map(field => field.name)
@@ -77,9 +54,11 @@ export async function refreshCollections(
         freshCollections[newCollection.name] = { ...existingCollection }
       } else {
         // not the same, reset the configuration
+
         // TODO: later we might want to make a nicer merge instead of just resetting
         freshCollections[newCollection.name] = {
           schema: newCollection,
+          geoLocationField: locationFields.length > 0 ? locationFields[0].name : null,
           searchParameters: {
             query_by: getAllFieldsOfType(newCollection, ['string', 'string[]'])
               .map(field => field.name)
@@ -95,7 +74,7 @@ export async function refreshCollections(
 
     return freshCollections
   } catch (err) {
-    throw err
+    console.error(err)
   }
 }
 

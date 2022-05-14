@@ -1,0 +1,23 @@
+{
+  repository(owner: "everdrone", name: "jetson-fan-table") {
+    releases(first: 1, orderBy: { field: CREATED_AT, direction: DESC }) {
+      nodes {
+        createdAt
+        databaseId
+        description
+        isLatest
+        name
+        tagName
+        releaseAssets(first: 16) {
+          edges {
+            node {
+              name
+              size
+              downloadUrl
+            }
+          }
+        }
+      }
+    }
+  }
+}

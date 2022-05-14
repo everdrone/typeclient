@@ -37,6 +37,8 @@
     justify-content: flex-end;
     font-size: 16px;
 
+    z-index: 200;
+
     div {
       width: 46px;
       height: var(--titlebar-height);

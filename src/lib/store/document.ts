@@ -1,8 +1,8 @@
 import { GetState, SetState } from 'zustand'
 
-import { ImportResponse } from './types'
+import { ImportResponse, DocumentAction } from './types'
 
-import { Store, DocumentAction, getClientOrThrow } from './common'
+import { Store, getClientOrThrow } from './common'
 
 export interface DocumentSlice {
   createDocument: (

@@ -5643,10 +5643,10 @@ react-instantsearch-core@6.24.2:
     prop-types "^15.6.2"
     react-fast-compare "^3.0.0"
 
-react-instantsearch-dom-maps@^6.24.2:
-  version "6.24.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom-maps/-/react-instantsearch-dom-maps-6.24.2.tgz#9cfb64cee08923a834fd02d99458db92459a460c"
-  integrity sha512-3+TgMEA8SoeEEHeejmBkJAVIn6iXXodfQ6pANwXYBG0ctJU93FiIsbWJfKKzGlRT/fAToXW7NjrdSQ9goWjJjw==
+react-instantsearch-dom-maps@^6.24.3:
+  version "6.24.3"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom-maps/-/react-instantsearch-dom-maps-6.24.3.tgz#a8c4509846fd3a1f2b9d2fef60589631d628f463"
+  integrity sha512-cje6lg0cI/zF2KfDQRlB55cdMOnBNzgUtURTEDa/9gSWw0i+K9x1WEtSbuBniMO68pzdS2gdbotyr4RNhPdCrw==
   dependencies:
     "@babel/runtime" "^7.1.2"
     prop-types "^15.6.2"

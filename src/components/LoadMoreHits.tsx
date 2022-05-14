@@ -15,7 +15,7 @@ function LoadMoreHits({
   const HitComponent = component
 
   return (
-    <div className="scroll-container-y">
+    <>
       <ul>
         {hits.map((hit: any) => (
           <li key={hit.objectID}>
@@ -24,7 +24,7 @@ function LoadMoreHits({
         ))}
       </ul>
       <Button disabled={!hasMore} onClick={refineNext} text="Load More" />
-    </div>
+    </>
   )
 }
 

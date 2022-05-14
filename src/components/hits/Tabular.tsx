@@ -9,7 +9,7 @@ import Button from 'components/Button'
 
 const ignoreKeys = ['objectID', '__position', '_snippetResult', '_highlightResult', 'text_match']
 
-export default function Tabular({ hit }: any) {
+function Tabular({ hit }: any) {
   const [currentCollectionName] = useStore(state => [state.currentCollectionName, state.deleteDocument])
 
   function handleDeleteDocument() {
@@ -23,8 +23,8 @@ export default function Tabular({ hit }: any) {
           .filter(key => !ignoreKeys.includes(key))
           .map(key => (
             <React.Fragment key={key}>
-              <div className="col-span-3 text-right">{key}</div>
-              <div className="col-span-9">
+              <div className="text-right col-span-3 xl:col-span-2">{key}</div>
+              <div className="col-span-9 xl:col-span-10">
                 <Highlight attribute={key} hit={hit} />
               </div>
             </React.Fragment>
@@ -35,6 +35,29 @@ export default function Tabular({ hit }: any) {
           <Button text="Edit" />
         </Link>
         <Button className="destructive" onClick={handleDeleteDocument} text="Delete" />
+      </div>
+    </>
+  )
+}
+
+export default function Tabular2({ hit }: any) {
+  return (
+    <>
+      <div className="grid grid-cols-12 gap-x-4">
+        {Object.keys(hit)
+          .filter(key => !ignoreKeys.includes(key))
+          .map(key => (
+            <React.Fragment key={key}>
+              <div className="text-right col-span-3 2xl:col-span-2">{key}</div>
+              <div className="col-span-9 2xl:col-span-10">{JSON.stringify(hit[key], null, 2)}</div>
+            </React.Fragment>
+          ))}
+      </div>
+      <div className="flex">
+        <Link to={`/documents/edit/${hit.id}`}>
+          <Button text="Edit" />
+        </Link>
+        <Button className="destructive" text="Delete" />
       </div>
     </>
   )
