@@ -2,7 +2,7 @@ import { BrowserWindow, ipcMain, dialog } from 'electron'
 import fs from 'fs'
 
 export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
-  ipcMain.handle('confirmDeleteDocument', (_, options) => {
+  ipcMain.handle('confirmDeleteDocument', (event, options) => {
     dialog
       .showMessageBox(mainWindow, {
         type: 'warning',
@@ -22,7 +22,7 @@ export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
       })
   })
 
-  ipcMain.handle('openImportDocumentsFromFile', (_, options) => {
+  ipcMain.handle('openImportDocumentsFromFile', (event, options) => {
     dialog
       .showOpenDialog(mainWindow, {
         title: 'Import documents',

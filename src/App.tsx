@@ -50,8 +50,11 @@ export default function App() {
   if (isConnecting) {
     return (
       <div className="window">
-        <div className="centered">
-          <Loading />
+        <TitleBar>Typeclient</TitleBar>
+        <div className="inner">
+          <div className="centered">
+            <Loading />
+          </div>
         </div>
       </div>
     )
@@ -60,8 +63,11 @@ export default function App() {
   if (!isConnected) {
     return (
       <div className="window">
-        <div className="centered">
-          <Connection />
+        <TitleBar>Typeclient</TitleBar>
+        <div className="inner">
+          <div className="centered">
+            <Connection />
+          </div>
         </div>
       </div>
     )
@@ -84,7 +90,7 @@ export default function App() {
             </div>
           </div>
           {/* main content */}
-          <div className="main border-l border-black relative">
+          <div className="main-content border-l border-black relative">
             {/* <div className="toolbar app-drag border-b border-black">toolbar space</div> */}
             <Routes>
               <Route path="/" element={<Dashboard />} />

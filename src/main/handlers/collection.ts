@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, dialog } from 'electron'
 
 export default function registerCollectionHandlers(mainWindow: BrowserWindow) {
-  ipcMain.handle('confirmDeleteCollection', (_, options) => {
+  ipcMain.handle('confirmDeleteCollection', (event, options) => {
     dialog
       .showMessageBox(mainWindow, {
         type: 'warning',
