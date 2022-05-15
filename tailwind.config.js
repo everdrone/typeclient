@@ -2,6 +2,13 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      ...(process.platform === 'win32'
+        ? {
+            fontFamily: {
+              mono: "'Cascadia Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+            },
+          }
+        : {}),
       colors: {
         accent: {
           fg: '#58A6FF',
