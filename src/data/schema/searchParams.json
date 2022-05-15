@@ -1,0 +1,128 @@
+{
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "q"
+  ],
+  "properties": {
+    "q": {
+      "type": "string"
+    },
+    "query_by": {
+      "type": "string"
+    },
+    "query_by_weights": {
+      "type": "string"
+    },
+    "prefix": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
+    },
+    "filter_by": {
+      "type": "string"
+    },
+    "sort_by": {
+      "type": "string"
+    },
+    "facet_by": {
+      "type": "string"
+    },
+    "max_facet_values": {
+      "type": "string"
+    },
+    "facet_query": {
+      "type": "string"
+    },
+    "page": {
+      "type": "number"
+    },
+    "per_page": {
+      "type": "number"
+    },
+    "group_by": {
+      "type": "string"
+    },
+    "group_limit": {
+      "type": "number"
+    },
+    "include_fields": {
+      "type": "string"
+    },
+    "exclude_fields": {
+      "type": "string"
+    },
+    "highlight_fields": {
+      "type": "string"
+    },
+    "highlight_full_fields": {
+      "type": "string"
+    },
+    "highlight_affix_num_tokens": {
+      "type": "number"
+    },
+    "highlight_start_tag": {
+      "type": "string"
+    },
+    "highlight_end_tag": {
+      "type": "string"
+    },
+    "snippet_threshold": {
+      "type": "number"
+    },
+    "num_typos": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "min_len_1typo": {
+      "type": "number"
+    },
+    "min_len_2typo": {
+      "type": "number"
+    },
+    "exhaustive_search": {
+      "type": "boolean"
+    },
+    "drop_tokens_threshold": {
+      "type": "number"
+    },
+    "typo_tokens_threshold": {
+      "type": "number"
+    },
+    "pinned_hits": {
+      "type": "string"
+    },
+    "hidden_hits": {
+      "type": "string"
+    },
+    "limit_hits": {
+      "type": "number"
+    },
+    "pre_segmented_query": {
+      "type": "boolean"
+    },
+    "enable_overrides": {
+      "type": "boolean"
+    },
+    "prioritize_exact_match": {
+      "type": "boolean"
+    },
+    "search_cutoff_ms": {
+      "type": "number"
+    },
+    "use_cache": {
+      "type": "boolean"
+    }
+  }
+}

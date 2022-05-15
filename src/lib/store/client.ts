@@ -5,6 +5,7 @@ import {
   NodeConfiguration,
   ExtendedCollectionsMap,
   SearchParametersWithQueryBy,
+  MetricsResponse,
 } from './types'
 
 import {
@@ -13,6 +14,7 @@ import {
   getAllFieldsOfType,
   connectionTimeoutSeconds,
   cacheSearchResultsForSeconds,
+  getClientOrThrow,
 } from './common'
 
 export interface ClientSlice {
@@ -24,6 +26,8 @@ export interface ClientSlice {
   connect: (apiKey: string, nodes: NodeConfiguration[]) => void
   disconnect: (preserveEndpoint: boolean) => void
   healthCheck: () => Promise<boolean>
+  getMetrics: () => Promise<MetricsResponse>
+  getStats: () => boolean
 }
 
 const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSlice => ({
@@ -138,6 +142,13 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
   },
   healthCheck: async function () {
     return await checkConnection(get().client)
+  },
+  getMetrics: function () {
+    return get().client?.metrics.retrieve()
+  },
+  getStats: function () {
+    return false
+    // return get().client?.stats.retrieve()
   },
 })
 

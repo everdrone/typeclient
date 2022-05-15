@@ -49,6 +49,13 @@ export default function Sidebar() {
       />
       <LinkButton
         disabled={!currentCollectionName}
+        to="/jsonsearch"
+        icon={<VscLocation />}
+        text="JSON Search"
+        active={pathname === '/jsonsearch'}
+      />
+      <LinkButton
+        disabled={!currentCollectionName}
         to="/documents/create"
         icon={<VscFile />}
         text="Documents"

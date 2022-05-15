@@ -6,6 +6,7 @@ export { default as Settings } from './Settings'
 export { default as Connection } from './Connection'
 export { default as Search } from './Search'
 export { default as GeoSearch } from './GeoSearch'
+export { default as JSONSearch } from './JSONSearch'
 
 export { default as Collections } from './Collections'
 export { default as CreateCollection } from './collections/CreateCollection'

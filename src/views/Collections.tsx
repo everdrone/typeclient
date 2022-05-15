@@ -35,7 +35,7 @@ export default function ListCollections() {
     <div>
       <ul className="grid grid-cols-12 gap-4 p-4">
         {Object.keys(collections).map(name => (
-          <li key={name} className="col-span-4 2xl:col-span-3 bg-canvas-overlay p-4">
+          <li key={name} className="col-span-4 2xl:col-span-3 bg-canvas-overlay p-4 rounded-xl">
             <p>{name}</p>
             <button
               onClick={() => {

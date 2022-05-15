@@ -5,6 +5,7 @@ import 'styles/index.scss'
 import 'styles/global.scss'
 import 'styles/misc.scss'
 import 'styles/fonts.scss'
+import 'styles/ais.scss'
 
 import useStore from 'lib/store'
 
@@ -17,6 +18,7 @@ import {
   Aliases,
   Search,
   GeoSearch,
+  JSONSearch,
   CreateCollection,
   Collection,
   CreateDocument,
@@ -99,6 +101,7 @@ export default function App() {
               <Route path="/aliases" element={<Aliases />} />
               <Route path="/search" element={<Search />} />
               <Route path="/geosearch" element={<GeoSearch />} />
+              <Route path="/jsonsearch" element={<JSONSearch />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/create" element={<CreateCollection />} />

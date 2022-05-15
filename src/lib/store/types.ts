@@ -11,7 +11,9 @@ export { KeysRetrieveSchema } from 'typesense/lib/Typesense/Keys'
 export { default as TypesenseInstantsearchAdapter } from 'typesense-instantsearch-adapter'
 export { SearchParametersWithQueryBy, SearchParametersOptionalQueryBy } from 'typesense-instantsearch-adapter'
 
-export { ImportResponse, SearchParams } from 'typesense/lib/Typesense/Documents'
+export { ImportResponse, SearchParams, SearchResponse } from 'typesense/lib/Typesense/Documents'
+
+export { MetricsResponse } from 'typesense/lib/Typesense/Metrics'
 
 export interface DisplayOptions {
   component: ComponentName
@@ -39,4 +41,10 @@ export enum DocumentAction {
   CREATE = 'create',
   UPSERT = 'upsert',
   UPDATE = 'update',
+}
+
+export interface MapState {
+  lat: number
+  lng: number
+  zoom: number
 }

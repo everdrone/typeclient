@@ -79,7 +79,7 @@ app.on('ready', () => {
         ...details.responseHeaders,
         // FIXME: this is insecure, see https://www.electronjs.org/docs/latest/tutorial/security#how-4
         'Content-Security-Policy': [
-          "default-src * 'unsafe-eval' 'unsafe-inline'; img-src * data: blob: 'unsafe-inline';",
+          "default-src * blob: 'unsafe-eval' 'unsafe-inline'; img-src * data: blob: 'unsafe-inline';",
         ],
       },
     })
