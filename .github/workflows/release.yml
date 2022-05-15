@@ -6,7 +6,6 @@ name: Release
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [main]
     tags: 'v*'
 
   # Allows you to run this workflow manually from the Actions tab
@@ -18,7 +17,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest, windows-latest]
         version: [16]
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
