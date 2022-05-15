@@ -4,7 +4,7 @@ const { productName } = require('./package.json')
 const appPath = path.resolve(process.cwd(), `out/${productName}-darwin-x64/${productName}.app`)
 
 module.exports = {
-  packagerConfig: { icon: 'assets/Icon.icns' },
+  packagerConfig: { icon: 'assets/Icon.icns', executableName: productName },
   makers: [
     // { name: '@electron-forge/maker-zip', platforms: ['darwin'] },
     { name: '@electron-forge/maker-squirrel', config: { name: 'Typeclient' } },
