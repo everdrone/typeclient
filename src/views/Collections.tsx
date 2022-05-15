@@ -54,7 +54,7 @@ export default function ListCollections() {
               onClick={() => handleDeleteCollection(name)}
               className="destructive"
               icon={<VscTrash />}
-              text="Dump"
+              text="Drop"
             />
           </li>
         ))}

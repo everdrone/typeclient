@@ -1,10 +1,7 @@
 const path = require('path')
 const { productName } = require('./package.json')
 
-const appPath = path.resolve(
-  process.cwd(),
-  `out/${productName}-darwin-x64/${productName}.app`
-)
+const appPath = path.resolve(process.cwd(), `out/${productName}-darwin-x64/${productName}.app`)
 
 module.exports = {
   packagerConfig: { icon: 'assets/Icon.icns' },
@@ -42,6 +39,11 @@ module.exports = {
               html: './src/index.html',
               js: './src/renderer.tsx',
               name: 'main_window',
+            },
+            {
+              html: './src/about.html',
+              js: './src/aboutRenderer.tsx',
+              name: 'about_window',
             },
           ],
         },

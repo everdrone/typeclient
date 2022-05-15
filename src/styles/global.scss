@@ -70,6 +70,11 @@
   height: calc(var(--titlebar-height) + 1px);
 }
 
+.safe-area-top.no-border {
+  border-bottom: none;
+  height: var(--titlebar-height);
+}
+
 /* FIXME: add a 1px border on windows that lays on top of everything (see vscode) */
 .window {
   /* background-image: url('/assets/top-halo@2x.png'); */
@@ -166,6 +171,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.about-icon {
+  background-image: url('../../assets/icon_128x128@2x.png');
+  width: 128px;
+  height: 128px;
+  background-size: 128px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* remove search field "X" */

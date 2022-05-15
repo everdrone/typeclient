@@ -49,20 +49,24 @@ export default function CreateDocument() {
     }
 
     ipcRenderer.on('importDocumentsFromFile', (event, data) => {
-      setIsLoading(true)
-      createDocument(currentCollectionName, data.documents, action)
-        .then(res => {
-          // all is good
-          console.log(`imported ${data.documents.length} documents`)
-          refreshCollections()
-          setCurrentCollection(currentCollectionName)
-          setIsLoading(false)
-          navigate('/search')
-        })
-        .catch(err => {
-          setError(err)
-          alert('FIXME: implement me!')
-        })
+      if (!data.documents) {
+        setIsLoading(false)
+      } else {
+        setIsLoading(true)
+        createDocument(currentCollectionName, data.documents, action)
+          .then(res => {
+            // all is good
+            console.log(`imported ${data.documents.length} documents`)
+            refreshCollections()
+            setCurrentCollection(currentCollectionName)
+            setIsLoading(false)
+            navigate('/search')
+          })
+          .catch(err => {
+            setError(err)
+            alert('FIXME: implement me!')
+          })
+      }
     })
 
     return () => {
@@ -83,7 +87,7 @@ export default function CreateDocument() {
   }
 
   function handleImportFromFile() {
-    setIsLoading(true)
+    // setIsLoading(true)
     ipcRenderer.invoke('openImportDocumentsFromFile', { collectionName: currentCollectionName })
   }
 

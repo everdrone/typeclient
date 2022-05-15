@@ -1,6 +1,8 @@
 import { BrowserWindow, ipcMain, dialog } from 'electron'
 import fs from 'fs'
 
+import store from 'lib/store'
+
 export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
   ipcMain.handle('confirmDeleteDocument', (event, options) => {
     dialog
@@ -33,10 +35,11 @@ export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
       })
       .then(response => {
         if (!response.canceled && response.filePaths.length) {
+          store.setState({ isLoading: true })
+
           const documents = fs.readFileSync(response.filePaths[0], { encoding: 'utf8', flag: 'r' })
 
-          let parsedDocuments: any
-          console.log(documents)
+          let parsedDocuments: any = null
 
           try {
             parsedDocuments = JSON.parse(documents)
@@ -48,12 +51,7 @@ export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
               }
             })
           } finally {
-            if (parsedDocuments) {
-              mainWindow.webContents.send('importDocumentsFromFile', { documents: parsedDocuments })
-            } else {
-              // something went wrong?
-              throw new Error('FIXME: implement me!')
-            }
+            mainWindow.webContents.send('importDocumentsFromFile', { documents: parsedDocuments })
           }
         }
       })

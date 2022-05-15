@@ -1,9 +1,8 @@
-import fs from 'fs'
-
-import { app, BrowserWindow, ipcMain, dialog, session } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, session, Menu } from 'electron'
 import type { MessageBoxOptions } from 'electron'
 
 import createMnemonicWindow from './mnemonicWindow'
+import { createAboutWindow } from './aboutWindow'
 
 import { registerDocumentHandlers, registerCollectionHandlers } from './handlers'
 
@@ -32,6 +31,7 @@ if (isDevelopment) {
 }
 
 let mainWindow: BrowserWindow
+let aboutWindow: BrowserWindow
 
 const windowOptions: Electron.BrowserWindowConstructorOptions = {
   height: 640,
@@ -44,7 +44,7 @@ const windowOptions: Electron.BrowserWindowConstructorOptions = {
     nodeIntegration: true,
     contextIsolation: false, // read into this!
   },
-  // backgroundColor: '#0D1117',
+  backgroundColor: '#0D1117',
   /* enable vibrancy */
   // transparent: true,
   // // vibrancy: 'window',
@@ -67,12 +67,63 @@ const createWindow = (): void => {
   }
 }
 
+// FIXME: implement double click on titlebar to maximize
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
 
+  // create application menu
+  let menuTemplate: Electron.MenuItemConstructorOptions[] = []
+
+  if (platform === 'darwin') {
+    menuTemplate.push({
+      label: app.name,
+      submenu: [
+        {
+          label: `About ${app.name}`,
+          click: () => {
+            if (!aboutWindow) {
+              aboutWindow = createAboutWindow()
+              aboutWindow.on('close', () => (aboutWindow = null))
+              if (isDevelopment) {
+                aboutWindow.webContents.openDevTools()
+              }
+            }
+          },
+        },
+        // { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' },
+      ],
+    })
+  }
+
+  menuTemplate.push({
+    role: 'help',
+    submenu: [
+      {
+        label: 'GitHub Repo',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://github.com/everdrone/typeclient')
+        },
+      },
+    ],
+  })
+
+  const menu = Menu.buildFromTemplate(menuTemplate)
+  Menu.setApplicationMenu(menu)
+
+  // set CSP
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {

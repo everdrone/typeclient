@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import useStore from 'lib/store'
@@ -21,9 +21,20 @@ import {
 } from 'react-icons/vsc'
 
 export default function Sidebar() {
-  const [disconnect, currentCollectionName] = useStore(state => [state.disconnect, state.currentCollectionName])
+  const [disconnect, currentCollectionName, setCurrentCollection, collections] = useStore(state => [
+    state.disconnect,
+    state.currentCollectionName,
+    state.setCurrentCollection,
+    state.collections,
+  ])
 
   const { pathname } = useLocation()
+
+  // useEffect(() => {
+  //   if (Object.keys(collections).length === 0) {
+  //     setCurrentCollection()
+  //   }
+  // }, [Object.keys(collections)])
 
   return (
     <div className="p-2 flex flex-col">

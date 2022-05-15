@@ -15,19 +15,21 @@ export default function SelectCollection() {
     setCurrentCollection(e.target.value)
   }
 
-  if (!collections) {
+  const currentCollection = collections[currentCollectionName]
+
+  if (Object.keys(collections).length === 0) {
     return <div className="ml-8 flex items-center justify-between text-secondary-muted">No collections</div>
   }
 
   return (
     <div className="relative">
       <Listbox
-        value={currentCollectionName ? collections[currentCollectionName].schema.name : collections[0].schema.name}
+        value={currentCollectionName ? currentCollection.schema.name : collections[0].schema.name}
         onChange={setCurrentCollection}
       >
         <Listbox.Button className="w-full flex items-center justify-between">
           <span className="ml-8">
-            {currentCollectionName} ({collections[currentCollectionName].schema.num_documents})
+            {currentCollectionName} ({currentCollection.schema.num_documents})
           </span>
           <VscChevronDown />
         </Listbox.Button>
@@ -48,7 +50,7 @@ export default function SelectCollection() {
 
   return (
     <select
-      value={currentCollectionName ? collections[currentCollectionName].schema.name : collections[0].schema.name}
+      value={currentCollectionName ? currentCollection.schema.name : collections[0].schema.name}
       onChange={handleChange}
     >
       {Object.keys(collections).map(name => (

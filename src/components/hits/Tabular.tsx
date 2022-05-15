@@ -57,7 +57,7 @@ export default function Tabular2({ hit }: any) {
         <Link to={`/documents/edit/${hit.id}`}>
           <Button text="Edit" />
         </Link>
-        <Button className="destructive" text="Delete" />
+        {/* <Button className="destructive" text="Delete" /> */}
       </div>
     </>
   )

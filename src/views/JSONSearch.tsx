@@ -12,10 +12,10 @@ import Button from 'components/Button'
 
 import { ExtendedCollectionDefinition, SearchParams, SearchResponse } from 'lib/store/types'
 import { getAllFieldsOfType } from 'lib/store/common'
+import generateDefaultSearchParams from 'lib/generateDefaultSearchParams'
 
 import { Allotment } from 'allotment'
-import 'allotment/dist/style.css'
-import generateDefaultSearchParams from 'lib/generateDefaultSearchParams'
+import 'styles/allotment.scss'
 
 export default function JSONSearch() {
   const [collections, currentCollectionName, search] = useStore(state => [
@@ -56,7 +56,12 @@ export default function JSONSearch() {
         const params: SearchParams = JSON.parse(withoutComments)
         search(currentCollectionRef.current.schema.name, params)
           .then(response => {
-            setResponse(prettier.format(JSON.stringify(response), { parser: 'json', plugins: [prettierParserBabel] }))
+            const formattedResponse = JSON.stringify(response, null, 2)
+            if (formattedResponse.split('\n').length > 1000) {
+              setResponse(formattedResponse)
+            } else {
+              setResponse(prettier.format(formattedResponse, { parser: 'json', plugins: [prettierParserBabel] }))
+            }
           })
           .catch(err => setError(err.message))
       } catch (err) {
