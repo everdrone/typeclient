@@ -11,10 +11,6 @@ export default function SelectCollection() {
     state.setCurrentCollection,
   ])
 
-  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
-    setCurrentCollection(e.target.value)
-  }
-
   const currentCollection = collections[currentCollectionName]
 
   if (Object.keys(collections).length === 0) {
@@ -46,18 +42,5 @@ export default function SelectCollection() {
         </Listbox.Options>
       </Listbox>
     </div>
-  )
-
-  return (
-    <select
-      value={currentCollectionName ? currentCollection.schema.name : collections[0].schema.name}
-      onChange={handleChange}
-    >
-      {Object.keys(collections).map(name => (
-        <option key={name} value={name}>
-          {name} ({collections[name].schema.num_documents})
-        </option>
-      ))}
-    </select>
   )
 }
