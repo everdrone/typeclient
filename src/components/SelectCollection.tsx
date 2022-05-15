@@ -18,7 +18,7 @@ export default function SelectCollection() {
   const currentCollection = collections[currentCollectionName]
 
   if (Object.keys(collections).length === 0) {
-    return <div className="ml-8 flex items-center justify-between text-secondary-muted">No collections</div>
+    return <div className="ml-4 flex items-center justify-between text-secondary-muted">No collections</div>
   }
 
   return (
@@ -27,11 +27,11 @@ export default function SelectCollection() {
         value={currentCollectionName ? currentCollection.schema.name : collections[0].schema.name}
         onChange={setCurrentCollection}
       >
-        <Listbox.Button className="w-full flex items-center justify-between">
-          <span className="ml-8">
-            {currentCollectionName} ({currentCollection.schema.num_documents})
+        <Listbox.Button className="w-full flex items-center justify-between button large">
+          <span className="ml-6 whitespace-nowrap overflow-hidden">
+            <span className="font-mono">{currentCollectionName}</span> ({currentCollection.schema.num_documents})
           </span>
-          <VscChevronDown />
+          <VscChevronDown className="shrink-0" />
         </Listbox.Button>
         <Listbox.Options className="absolute left-4 bg-canvas-overlay rounded-xl z-20 p-2 border border-border-default shadow-2xl">
           {Object.keys(collections).map(name => (

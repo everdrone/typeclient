@@ -44,6 +44,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            out/make/**/*.exe
-            out/make/**/*.dmg
-            out/make/**/*.deb'
+            out/make/squirrel.windows/x64/*.exe
+            out/make/*.dmg
