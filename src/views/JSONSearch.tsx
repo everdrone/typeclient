@@ -18,26 +18,28 @@ import { Allotment } from 'allotment'
 import 'styles/allotment.scss'
 
 export default function JSONSearch() {
-  const [collections, currentCollectionName, search] = useStore(state => [
+  const [client, collections, currentCollectionName, search] = useStore(state => [
+    state.client,
     state.collections,
     state.currentCollectionName,
     state.search,
   ])
 
-  const currentCollection = collections[currentCollectionName]
-  const currentCollectionRef = useRef<ExtendedCollectionDefinition>(currentCollection)
+  const currentCollectionRef = useRef<ExtendedCollectionDefinition>(collections[currentCollectionName])
 
-  const defaultSearchParams = generateDefaultSearchParams(currentCollection.schema)
-
-  const [searchParams, setSearchParams] = React.useState<string>(
-    prettier.format(JSON.stringify(defaultSearchParams), { parser: 'json', plugins: [prettierParserBabel] })
-  )
+  const [searchParams, setSearchParams] = React.useState<string>('')
   const searchParamsRef = useRef<string>(searchParams)
   const [error, setError] = React.useState<string | null>(null)
   const [response, setResponse] = React.useState<string | null>(null)
 
   useEffect(() => {
     currentCollectionRef.current = collections[currentCollectionName]
+
+    const defaultSearchParams = generateDefaultSearchParams(collections[currentCollectionName].schema)
+    setSearchParams(
+      prettier.format(JSON.stringify(defaultSearchParams), { parser: 'json', plugins: [prettierParserBabel] })
+    )
+    console.log(defaultSearchParams)
   }, [currentCollectionName])
 
   useEffect(() => {
@@ -45,9 +47,7 @@ export default function JSONSearch() {
   }, [searchParams])
 
   function handleSearch() {
-    console.log(currentCollectionName, searchParams)
-
-    if (searchParams) {
+    if (searchParamsRef.current) {
       try {
         const withoutComments = searchParamsRef.current.replace(
           /\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g,
@@ -57,7 +57,8 @@ export default function JSONSearch() {
         search(currentCollectionRef.current.schema.name, params)
           .then(response => {
             const formattedResponse = JSON.stringify(response, null, 2)
-            if (formattedResponse.split('\n').length > 1000) {
+            // if above 2000 lines, skip prettier (slow)
+            if (formattedResponse.split('\n').length > 2000) {
               setResponse(formattedResponse)
             } else {
               setResponse(prettier.format(formattedResponse, { parser: 'json', plugins: [prettierParserBabel] }))
@@ -68,6 +69,10 @@ export default function JSONSearch() {
         alert('could not parse')
       }
     }
+  }
+
+  if (!client || !currentCollectionName) {
+    return null
   }
 
   return (
@@ -90,7 +95,8 @@ export default function JSONSearch() {
             onChange={setSearchParams}
             onMount={(editor, monaco) => {
               monaco.editor.remeasureFonts()
-              editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => handleSearch())
+              // editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, handleSearch)
+              editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, handleSearch)
             }}
           />
         </Allotment.Pane>
