@@ -11,6 +11,7 @@ import {
   CurrentRefinements,
   Stats,
 } from 'react-instantsearch-dom'
+import { Navigate } from 'react-router-dom'
 
 import useStore from 'lib/store'
 import LoadMoreHits from 'components/LoadMoreHits'
@@ -21,10 +22,12 @@ export default function Search() {
   // FIXME: when new collections are created, the store doesn't update
   // create a function to update the store when routes change
   console.log('Search')
-  const [adapter, collections, currentCollectionName, deleteDocument] = useStore(state => [
+  const [client, adapter, collections, currentCollectionName, refreshCollections, deleteDocument] = useStore(state => [
+    state.client,
     state.adapter,
     state.collections,
     state.currentCollectionName,
+    state.refreshCollections,
     state.deleteDocument,
   ])
 
@@ -32,26 +35,33 @@ export default function Search() {
 
   // NOTE: this is gonna change in v0.23: [...].includes(field.type) && field.sort
   const sortBy = [{ label: 'Default', value: currentCollectionName }]
-  currentCollection.schema.fields
-    .filter(field => ['int32', 'int32[]', 'int64', 'int64[]', 'float', 'float[]'].includes(field.type))
-    .map(field => {
-      sortBy.push({ label: `${field.name} asc`, value: `${currentCollectionName}/sort/${field.name}:asc` })
-      sortBy.push({ label: `${field.name} desc`, value: `${currentCollectionName}/sort/${field.name}:desc` })
-    })
+  currentCollection &&
+    currentCollection.schema.fields
+      .filter(field => ['int32', 'int32[]', 'int64', 'int64[]', 'float', 'float[]'].includes(field.type))
+      .map(field => {
+        sortBy.push({ label: `${field.name} asc`, value: `${currentCollectionName}/sort/${field.name}:asc` })
+        sortBy.push({ label: `${field.name} desc`, value: `${currentCollectionName}/sort/${field.name}:desc` })
+      })
 
-  const stringFacets = currentCollection.schema.fields.filter(
-    field => ['string', 'string[]', 'string*', 'auto'].includes(field.type) && field.facet
-  )
+  const stringFacets = currentCollection
+    ? currentCollection.schema.fields.filter(
+        field => ['string', 'string[]', 'string*', 'auto'].includes(field.type) && field.facet
+      )
+    : []
 
-  const numberFacets = currentCollection.schema.fields.filter(
-    field => ['int32', 'int32[]', 'int64', 'int64[]', 'float', 'float[]'].includes(field.type) && field.facet
-  )
+  const numberFacets = currentCollection
+    ? currentCollection.schema.fields.filter(
+        field => ['int32', 'int32[]', 'int64', 'int64[]', 'float', 'float[]'].includes(field.type) && field.facet
+      )
+    : []
 
-  const boolFacets = currentCollection.schema.fields.filter(
-    field => ['bool', 'bool[]'].includes(field.type) && field.facet
-  )
+  const boolFacets = currentCollection
+    ? currentCollection.schema.fields.filter(field => ['bool', 'bool[]'].includes(field.type) && field.facet)
+    : []
 
   useEffect(() => {
+    refreshCollections()
+
     ipcRenderer.on('deleteDocument', (event, data) => {
       deleteDocument(currentCollectionName, data.id)
     })
@@ -59,11 +69,12 @@ export default function Search() {
     return () => {
       ipcRenderer.removeAllListeners('deleteDocument')
     }
-  })
+  }, [])
 
-  if (!adapter || !currentCollection) {
-    console.log(adapter, currentCollection)
-    return null
+  if (!client || !adapter || !currentCollection) {
+    console.log(client, adapter)
+    // return null
+    return <Navigate replace to="/" />
   }
 
   return (

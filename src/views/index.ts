@@ -20,3 +20,6 @@ export { default as Synonyms } from './Synonyms'
 
 export { default as ApiKeys } from './ApiKeys'
 export { default as CreateApiKey } from './keys/CreateApiKey'
+
+export { default as Curations } from './Curations'
+export { default as CreateCuration } from './curations/CreateCuration'

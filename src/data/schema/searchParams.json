@@ -1,9 +1,7 @@
 {
   "additionalProperties": false,
   "type": "object",
-  "required": [
-    "q"
-  ],
+  "required": ["q"],
   "properties": {
     "q": {
       "type": "string"
@@ -15,7 +13,7 @@
       "type": "string"
     },
     "prefix": {
-      "anyOf": [
+      "oneOf": [
         {
           "type": "string"
         },
@@ -76,7 +74,7 @@
       "type": "number"
     },
     "num_typos": {
-      "anyOf": [
+      "oneOf": [
         {
           "type": "number"
         },

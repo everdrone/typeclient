@@ -3,22 +3,24 @@ import { Listbox } from '@headlessui/react'
 
 import useStore from 'lib/store'
 import { VscChevronDown } from 'react-icons/vsc'
+import { refreshCollections } from 'lib/store/common'
 
 export default function SelectCollection() {
-  const [collections, currentCollectionName, setCurrentCollection] = useStore(state => [
+  const [collections, currentCollectionName, refreshCollections, setCurrentCollection] = useStore(state => [
     state.collections,
     state.currentCollectionName,
+    state.refreshCollections,
     state.setCurrentCollection,
   ])
 
   const currentCollection = collections[currentCollectionName]
 
   if (Object.keys(collections).length === 0) {
-    return <div className="ml-4 flex items-center justify-between text-secondary-muted">No collections</div>
+    return <div className="ml-10 flex items-center justify-between h-[40px] text-secondary-muted">No collections</div>
   }
 
   return (
-    <div className="relative">
+    <div className="relative" onClick={refreshCollections}>
       <Listbox
         value={currentCollectionName ? currentCollection.schema.name : collections[0].schema.name}
         onChange={setCurrentCollection}

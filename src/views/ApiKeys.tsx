@@ -8,11 +8,16 @@ import { KeysRetrieveSchema } from 'lib/store/types'
 import { LinkButton } from 'components/Button'
 
 export default function ApiKeys() {
-  const [getAllKeys, deleteKey] = useStore(state => [state.getAllKeys, state.deleteKey])
+  const [getAllKeys, deleteKey, refreshCollections] = useStore(state => [
+    state.getAllKeys,
+    state.deleteKey,
+    state.refreshCollections,
+  ])
 
   const [keys, setKeys] = useState<KeysRetrieveSchema>()
 
   useEffect(() => {
+    refreshCollections()
     getAllKeys().then(result => result && setKeys(result))
   }, [])
 

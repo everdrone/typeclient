@@ -13,6 +13,9 @@ export { SearchParametersWithQueryBy, SearchParametersOptionalQueryBy } from 'ty
 
 export { ImportResponse, SearchParams, SearchResponse } from 'typesense/lib/Typesense/Documents'
 
+export { OverrideCreateSchema, OverridesRetrieveSchema } from 'typesense/lib/Typesense/Overrides'
+export { OverrideSchema, OverrideDeleteSchema } from 'typesense/lib/Typesense/Override'
+
 export { MetricsResponse } from 'typesense/lib/Typesense/Metrics'
 
 export interface DisplayOptions {

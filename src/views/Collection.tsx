@@ -32,8 +32,9 @@ export default function Collection() {
       setCurrentCollection(name)
     }
 
-    ipcRenderer.on('deleteCollection', (event, data) => {
+    ipcRenderer.on('deleteCollection', (_, data) => {
       deleteCollection(data.name)
+      navigate('/collections')
     })
 
     return () => {
@@ -43,7 +44,6 @@ export default function Collection() {
 
   function handleDeleteCollection(name: string) {
     ipcRenderer.invoke('confirmDeleteCollection', { name })
-    navigate('/collections')
   }
 
   if (!collection) {

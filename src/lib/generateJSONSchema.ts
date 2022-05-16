@@ -72,7 +72,7 @@ function typesenseTypeToJsonType(type: FieldType): JSONSchema7 {
       }
     case 'string*':
       return {
-        anyOf: [
+        oneOf: [
           {
             type: 'string',
           },
@@ -94,7 +94,7 @@ function typesenseTypeToJsonType(type: FieldType): JSONSchema7 {
           {
             type: 'array',
             items: {
-              anyOf: [{ type: 'string' }, { type: 'integer' }, { type: 'number' }, { type: 'boolean' }],
+              oneOf: [{ type: 'string' }, { type: 'integer' }, { type: 'number' }, { type: 'boolean' }],
             },
           },
           {

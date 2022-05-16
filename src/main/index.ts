@@ -37,7 +37,7 @@ const windowOptions: Electron.BrowserWindowConstructorOptions = {
   height: 640,
   width: 1200,
   minWidth: 1200,
-  minHeight: 600,
+  minHeight: 640,
   titleBarStyle: 'hidden',
   // titleBarStyle: 'hiddenInset',
   webPreferences: {
@@ -104,6 +104,10 @@ app.on('ready', () => {
         { type: 'separator' },
         { role: 'quit' },
       ],
+    })
+
+    menuTemplate.push({
+      role: 'editMenu',
     })
   }
 

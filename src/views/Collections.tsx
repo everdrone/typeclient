@@ -9,8 +9,9 @@ import Button, { LinkButton } from 'components/Button'
 import useStore from 'lib/store'
 
 export default function ListCollections() {
-  const [collections, deleteCollection, setCurrentCollection] = useStore(state => [
+  const [collections, refreshCollections, deleteCollection, setCurrentCollection] = useStore(state => [
     state.collections,
+    state.refreshCollections,
     state.deleteCollection,
     state.setCurrentCollection,
   ])
@@ -18,6 +19,8 @@ export default function ListCollections() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    refreshCollections()
+
     ipcRenderer.on('deleteCollection', (event, data) => {
       deleteCollection(data.name)
     })

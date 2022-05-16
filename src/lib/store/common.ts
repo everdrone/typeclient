@@ -6,6 +6,7 @@ import { ClientSlice } from './client'
 import { CollectionSlice } from './collection'
 import { DocumentSlice } from './document'
 import { KeySlice } from './key'
+import { CurationSlice } from './curation'
 import { PreferencesSlice } from './preferences'
 
 export const connectionTimeoutSeconds = 5
@@ -48,7 +49,7 @@ export async function refreshCollections(
 
       const existingCollection = oldCollections[newCollection.name]
 
-      if (deepEqual(newCollection, existingCollection.schema)) {
+      if (existingCollection && deepEqual(newCollection, existingCollection.schema)) {
         // is the same, add it as is
         freshCollections[newCollection.name] = { ...existingCollection }
       } else {
@@ -103,4 +104,4 @@ export function getClientOrThrow(client: Client | null) {
   return client as Client
 }
 
-export type Store = ClientSlice & CollectionSlice & DocumentSlice & KeySlice & PreferencesSlice
+export type Store = ClientSlice & CollectionSlice & DocumentSlice & KeySlice & PreferencesSlice & CurationSlice

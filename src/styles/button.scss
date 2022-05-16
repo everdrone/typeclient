@@ -24,6 +24,18 @@
     }
   }
 
+  &.accent {
+    @apply text-accent-fg;
+
+    &:hover {
+      @apply bg-accent-subtle;
+    }
+
+    svg {
+      @apply text-accent-fg;
+    }
+  }
+
   &.focused {
     @apply bg-secondary-subtle;
   }

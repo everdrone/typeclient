@@ -8,6 +8,7 @@ import createClientSlice from './client'
 import createCollectionSlice from './collection'
 import createDocumentSlice from './document'
 import createKeySlice from './key'
+import createCurationSlice from './curation'
 import createPreferencesSlice from './preferences'
 
 const STORAGE_NAME = 'typesense-dashboard-connection'
@@ -19,6 +20,7 @@ const useStore = create<Store>()(
       ...createCollectionSlice(set, get),
       ...createDocumentSlice(set, get),
       ...createKeySlice(set, get),
+      ...createCurationSlice(set, get),
       ...createPreferencesSlice(set, get),
     }),
     {

@@ -6,6 +6,7 @@ import * as monaco from 'monaco-editor'
 import { ipcRenderer } from 'electron'
 import { useParams, useNavigate } from 'react-router-dom'
 import { VscAdd, VscFolderOpened } from 'react-icons/vsc'
+import title from 'title'
 
 import useStore from 'lib/store'
 import { DocumentAction } from 'lib/store/types'
@@ -108,7 +109,7 @@ export default function CreateDocument() {
                   fileMatch: ['*'],
                   uri: 'do.not.load',
                   schema: {
-                    anyOf: [
+                    oneOf: [
                       { ...jsonSchema },
                       {
                         type: 'array',
@@ -131,14 +132,15 @@ export default function CreateDocument() {
           }}
         />
       </div>
-      <div id="bottom" className="border-t border-black flex p-2">
-        <select value={action} onChange={e => setAction(e.target.value as DocumentAction)}>
-          <option value={DocumentAction.UPSERT}>Upsert</option>
-          <option value={DocumentAction.CREATE}>Create</option>
-          <option value={DocumentAction.UPDATE}>Update</option>
-        </select>
-        {/* FIXME: Capitalize action! */}
-        <Button onClick={handleCreateDocument} icon={<VscAdd />} text={action} />
+      <div id="bottom" className="border-t border-black flex justify-between p-2">
+        <div className="flex">
+          <select value={action} onChange={e => setAction(e.target.value as DocumentAction)}>
+            <option value={DocumentAction.UPSERT}>Upsert</option>
+            <option value={DocumentAction.CREATE}>Create</option>
+            <option value={DocumentAction.UPDATE}>Update</option>
+          </select>
+          <Button onClick={handleCreateDocument} icon={<VscAdd />} text={title(action)} />
+        </div>
         <Button onClick={handleImportFromFile} icon={<VscFolderOpened />} text="Import" />
       </div>
     </>

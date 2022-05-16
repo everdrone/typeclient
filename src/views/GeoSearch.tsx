@@ -10,8 +10,8 @@ import { connectGeoSearch, InstantSearch, Configure } from 'react-instantsearch-
 
 import useStore from 'lib/store'
 import { GenericObject } from 'lib/store/types'
-
-const accessToken = 'pk.eyJ1IjoiZXZlcmRyb25lIiwiYSI6ImNsMjd3bDl6NTAxbW4zZG84Mnpvemhvb3EifQ.NK07hupZL8yXapGJAMiRlg'
+import { LinkButton } from 'components/Button'
+import { VscSettingsGear } from 'react-icons/vsc'
 
 interface GeoPoint {
   lat: number
@@ -30,7 +30,11 @@ function MapBox({ refine, hits }: GeoSearchProvided) {
   const searchAsMoveRef = useRef(searchAsMove)
   const [hasMovedSinceLastRefine, setHasMovedSinceLastRefine] = useState(false)
 
-  const [lastMapPosition, setLastMapPosition] = useStore(state => [state.lastMapPosition, state.setLastMapPosition])
+  const [lastMapPosition, setLastMapPosition, mapBoxToken] = useStore(state => [
+    state.lastMapPosition,
+    state.setLastMapPosition,
+    state.mapBoxToken,
+  ])
   const navigate = useNavigate()
 
   const handleOnLoad = useCallback(() => {
@@ -187,7 +191,7 @@ function MapBox({ refine, hits }: GeoSearchProvided) {
         style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
         mapStyle="mapbox://styles/everdrone/cl35pegpu007k15qf92e80fxw"
         onLoad={handleOnLoad}
-        mapboxAccessToken={accessToken}
+        mapboxAccessToken={mapBoxToken}
       >
         {refineButton}
         <NavigationControl showCompass={false} position="top-left" />
@@ -202,10 +206,11 @@ const ConnectedMapBox = connectGeoSearch(MapBox)
 export default function GeoSearch() {
   console.log('MapBox Geo Search')
 
-  const [adapter, collections, currentCollectionName] = useStore(state => [
+  const [adapter, collections, currentCollectionName, mapBoxToken] = useStore(state => [
     state.adapter,
     state.collections,
     state.currentCollectionName,
+    state.mapBoxToken,
   ])
 
   const currentCollection = collections[currentCollectionName]
@@ -213,6 +218,15 @@ export default function GeoSearch() {
   if (!adapter || !currentCollection) {
     console.log(adapter, currentCollection)
     return null
+  }
+
+  if (!mapBoxToken) {
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <p>A MapBox token is required to use interactive maps</p>
+        <LinkButton to="/settings" icon={<VscSettingsGear />} text="Settings" className="accent mt-2" />
+      </div>
+    )
   }
 
   return (

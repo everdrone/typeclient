@@ -16,6 +16,7 @@ import {
   VscMirror,
   VscSearch,
   VscSettingsGear,
+  VscJson,
   VscSignOut,
   VscVersions,
 } from 'react-icons/vsc'
@@ -53,13 +54,13 @@ export default function Sidebar() {
         text="API Keys"
         active={pathname.startsWith('/apikeys')}
       />
-      <LinkButton
+      {/* <LinkButton
         className="large"
         to="/aliases"
         icon={<VscListTree />}
         text="Aliases"
         active={pathname.startsWith('/aliases')}
-      />
+      /> */}
       <SelectCollection />
       {/* these routes only work if a collection is selected */}
       <LinkButton
@@ -82,7 +83,7 @@ export default function Sidebar() {
         className="large"
         disabled={!currentCollectionName}
         to="/jsonsearch"
-        icon={<VscLocation />}
+        icon={<VscJson />}
         text="JSON Search"
         active={pathname.startsWith('/jsonsearch')}
       />
@@ -102,14 +103,14 @@ export default function Sidebar() {
         text="Schema"
         active={pathname.startsWith('/schema')}
       />
-      <LinkButton
+      {/* <LinkButton
         className="large"
         disabled={!currentCollectionName}
         to="/synonyms"
         icon={<VscMirror />}
         text="Synonyms"
         active={pathname.startsWith('/synonyms')}
-      />
+      /> */}
       <LinkButton
         className="large"
         disabled={!currentCollectionName}

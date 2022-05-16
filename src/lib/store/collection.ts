@@ -175,11 +175,13 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
   },
   refreshCollections: function () {
     const client = getClientOrThrow(get().client)
+    let adapter: TypesenseInstantsearchAdapter = null
 
+    console.info('refreshing collections')
     refreshCollections(client, get().collections).then(newCollections => {
       let currentCollectionName = get().currentCollectionName
 
-      if (!(currentCollectionName in newCollections)) {
+      if (newCollections && !(currentCollectionName in newCollections)) {
         const availableCollections = Object.keys(newCollections)
         if (availableCollections.length > 0) {
           currentCollectionName = availableCollections[0]
@@ -188,9 +190,24 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
         }
       }
 
-      console.info('refreshing collections')
+      if (currentCollectionName) {
+        adapter = new TypesenseInstantsearchAdapter({
+          server: {
+            apiKey: get().connection.apiKey,
+            nodes: get().connection.nodes,
+            connectionTimeoutSeconds,
+            cacheSearchResultsForSeconds,
+          },
+          geoLocationField: newCollections[currentCollectionName].geoLocationField,
+          additionalSearchParameters: {
+            ...newCollections[currentCollectionName].searchParameters,
+          },
+        })
+      }
 
       set(() => ({
+        client,
+        adapter,
         collections: { ...(newCollections as ExtendedCollectionsMap) },
         currentCollectionName,
       }))

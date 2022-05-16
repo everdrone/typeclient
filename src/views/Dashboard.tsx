@@ -6,7 +6,7 @@ import { MetricsResponse } from 'lib/store/types'
 import prettyBytes from 'pretty-bytes'
 
 export default function Dashboard() {
-  const [getMetrics] = useStore(state => [state.getMetrics])
+  const [getMetrics, refreshCollections] = useStore(state => [state.getMetrics, state.refreshCollections])
 
   const [metrics, setMetrics] = useState<MetricsResponse>()
 
@@ -21,6 +21,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+    refreshCollections()
     handleGetMetrics()
 
     const instervalId = setInterval(handleGetMetrics, 2000)

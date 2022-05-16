@@ -22,6 +22,8 @@ import {
   CreateCollection,
   Collection,
   CreateDocument,
+  Curations,
+  CreateCuration,
   Settings,
   CreateApiKey,
 } from './views'
@@ -106,9 +108,12 @@ export default function App() {
               <Route path="/settings" element={<Settings />} />
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/create" element={<CreateCollection />} />
-              <Route path="/schema/:name" element={<Collection />} />
               <Route path="/documents/create" element={<CreateDocument />} />
               <Route path="/documents/edit/:id" element={<CreateDocument />} />
+              <Route path="/schema/:name" element={<Collection />} />
+              <Route path="/curations" element={<Curations />} />
+              <Route path="/curations/create" element={<CreateCuration />} />
+              <Route path="/curations/edit/:id" element={<CreateCuration />} />
             </Routes>
           </div>
         </div>

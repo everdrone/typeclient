@@ -1,0 +1,61 @@
+{
+  "additionalProperties": false,
+  "type": "object",
+  "required": ["rule", "id"],
+  "anyOf": [{ "required": ["excludes"] }, { "required": ["includes"] }, { "required": ["filter_by"] }],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rule": {
+      "type": "object",
+      "required": ["query", "match"],
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "match": {
+          "type": "string",
+          "enum": ["exact", "contains"]
+        }
+      }
+    },
+    "filter_by": {
+      "type": "string"
+    },
+    "remove_matched_tokens": {
+      "type": "boolean"
+    },
+    "includes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "position"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "excludes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,14 +6,17 @@ import Monaco from 'monaco-editor'
 import { format } from 'prettier/standalone'
 import prettierParserBabel from 'prettier/parser-babel'
 
+import { VscPlay } from 'react-icons/vsc'
+import { Allotment } from 'allotment'
+import 'styles/allotment.scss'
+
 import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/searchParams.json'
 
 import { ExtendedCollectionDefinition, SearchParams } from 'lib/store/types'
 import generateDefaultSearchParams from 'lib/generateDefaultSearchParams'
 
-import { Allotment } from 'allotment'
-import 'styles/allotment.scss'
+import Button from 'components/Button'
 
 export default function JSONSearch() {
   const [client, collections, currentCollectionName, search] = useStore(state => [
@@ -73,46 +76,51 @@ export default function JSONSearch() {
 
   return (
     <div className="flex flex-col h-full">
-      <Allotment>
-        <Allotment.Pane minSize={300}>
-          {/* <div>{error && <div className="bg-red-500 text-white text-sm p-2 select-text">{error}</div>}</div> */}
-          <CodeEditor
-            language="json"
-            beforeMount={monaco => {
-              monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-                validate: true,
-                allowComments: true,
-                schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
-              })
-              monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
-            }}
-            defaultValue={JSON.stringify(searchParams, null, 2)}
-            value={searchParams}
-            onChange={setSearchParams}
-            onMount={(editor, monaco) => {
-              monaco.editor.remeasureFonts()
-              // editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, handleSearch)
-              editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, handleSearch)
-            }}
-          />
-        </Allotment.Pane>
-        <Allotment.Pane minSize={300}>
-          <CodeEditor
-            language="json"
-            beforeMount={monaco => {
-              // monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-              //   validate: true,
-              //   allowComments: false,
-              //   schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
-              // })
-              monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
-            }}
-            options={{ readOnly: true }}
-            defaultValue={''}
-            value={response || ''}
-          />
-        </Allotment.Pane>
-      </Allotment>
+      <div className="grow">
+        <Allotment>
+          <Allotment.Pane minSize={300}>
+            {/* <div>{error && <div className="bg-red-500 text-white text-sm p-2 select-text">{error}</div>}</div> */}
+            <CodeEditor
+              language="json"
+              beforeMount={monaco => {
+                monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                  validate: true,
+                  allowComments: true,
+                  schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
+                })
+                monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
+              }}
+              defaultValue={JSON.stringify(searchParams, null, 2)}
+              value={searchParams}
+              onChange={setSearchParams}
+              onMount={(editor, monaco) => {
+                monaco.editor.remeasureFonts()
+                // editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, handleSearch)
+                editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, handleSearch)
+              }}
+            />
+          </Allotment.Pane>
+          <Allotment.Pane minSize={300}>
+            <CodeEditor
+              language="json"
+              beforeMount={monaco => {
+                // monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                //   validate: true,
+                //   allowComments: false,
+                //   schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
+                // })
+                monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
+              }}
+              options={{ readOnly: true }}
+              defaultValue={''}
+              value={response || ''}
+            />
+          </Allotment.Pane>
+        </Allotment>
+      </div>
+      <div className="border-t border-black p-2">
+        <Button onClick={handleSearch} icon={<VscPlay />} text="Search" />
+      </div>
     </div>
   )
 }
