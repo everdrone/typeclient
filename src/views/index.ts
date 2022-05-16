@@ -17,4 +17,6 @@ export { default as CreateDocument } from './documents/CreateDocument'
 export { default as Aliases } from './Aliases'
 export { default as Curation } from './Curation'
 export { default as Synonyms } from './Synonyms'
+
 export { default as ApiKeys } from './ApiKeys'
+export { default as CreateApiKey } from './keys/CreateApiKey'

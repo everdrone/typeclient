@@ -23,6 +23,7 @@ import {
   Collection,
   CreateDocument,
   Settings,
+  CreateApiKey,
 } from './views'
 
 import { HashRouter, Routes, Route, Link } from 'react-router-dom'
@@ -98,6 +99,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/apikeys" element={<ApiKeys />} />
+              <Route path="/apikeys/create" element={<CreateApiKey />} />
               <Route path="/aliases" element={<Aliases />} />
               <Route path="/search" element={<Search />} />
               <Route path="/geosearch" element={<GeoSearch />} />
@@ -105,7 +107,7 @@ export default function App() {
               <Route path="/settings" element={<Settings />} />
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/create" element={<CreateCollection />} />
-              <Route path="/collection/:name" element={<Collection />} />
+              <Route path="/schema/:name" element={<Collection />} />
               <Route path="/documents/create" element={<CreateDocument />} />
               <Route path="/documents/edit/:id" element={<CreateDocument />} />
             </Routes>

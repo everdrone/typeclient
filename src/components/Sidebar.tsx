@@ -44,15 +44,21 @@ export default function Sidebar() {
         to="/collections"
         icon={<VscVersions />}
         text="Collections"
-        active={pathname === '/collections'}
+        active={pathname.startsWith('/collection')}
       />
-      <LinkButton className="large" to="/apikeys" icon={<VscKey />} text="API Keys" active={pathname === '/apikeys'} />
+      <LinkButton
+        className="large"
+        to="/apikeys"
+        icon={<VscKey />}
+        text="API Keys"
+        active={pathname.startsWith('/apikeys')}
+      />
       <LinkButton
         className="large"
         to="/aliases"
         icon={<VscListTree />}
         text="Aliases"
-        active={pathname === '/aliases'}
+        active={pathname.startsWith('/aliases')}
       />
       <SelectCollection />
       {/* these routes only work if a collection is selected */}
@@ -62,7 +68,7 @@ export default function Sidebar() {
         to="/search"
         icon={<VscSearch />}
         text="Search"
-        active={pathname === '/search'}
+        active={pathname.startsWith('/search')}
       />
       <LinkButton
         className="large"
@@ -70,7 +76,7 @@ export default function Sidebar() {
         to="/geosearch"
         icon={<VscLocation />}
         text="Geo Search"
-        active={pathname === '/geosearch'}
+        active={pathname.startsWith('/geosearch')}
       />
       <LinkButton
         className="large"
@@ -78,7 +84,7 @@ export default function Sidebar() {
         to="/jsonsearch"
         icon={<VscLocation />}
         text="JSON Search"
-        active={pathname === '/jsonsearch'}
+        active={pathname.startsWith('/jsonsearch')}
       />
       <LinkButton
         className="large"
@@ -86,15 +92,15 @@ export default function Sidebar() {
         to="/documents/create"
         icon={<VscFile />}
         text="Documents"
-        active={pathname === '/documents/create'}
+        active={pathname.startsWith('/documents/create')}
       />
       <LinkButton
         className="large"
         disabled={!currentCollectionName}
-        to="/schema"
+        to={`/schema/${currentCollectionName}`}
         icon={<VscBracketDot />}
         text="Schema"
-        active={pathname === '/schema'}
+        active={pathname.startsWith('/schema')}
       />
       <LinkButton
         className="large"
@@ -102,7 +108,7 @@ export default function Sidebar() {
         to="/synonyms"
         icon={<VscMirror />}
         text="Synonyms"
-        active={pathname === '/synonyms'}
+        active={pathname.startsWith('/synonyms')}
       />
       <LinkButton
         className="large"
@@ -110,7 +116,7 @@ export default function Sidebar() {
         to="/curations"
         icon={<VscBeaker />}
         text="Curation"
-        active={pathname === '/curations'}
+        active={pathname.startsWith('/curations')}
       />
       <LinkButton
         className="large"
@@ -118,7 +124,7 @@ export default function Sidebar() {
         to="/settings"
         icon={<VscSettingsGear />}
         text="Settings"
-        active={pathname === '/settings'}
+        active={pathname.startsWith('/settings')}
       />
       <Button className="large" onClick={() => disconnect(false)} icon={<VscSignOut />} text="Disconnect" />
     </div>

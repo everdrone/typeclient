@@ -45,7 +45,7 @@ export default function ListCollections() {
             >
               <p>documents: {collections[name].schema.num_documents}</p>
             </button>
-            <Link to={`/collection/${name}`}>
+            <Link to={`/schema/${name}`}>
               <p>fields: {collections[name].schema.fields.length}</p>
               <p>shards: {collections[name].schema.num_memory_shards}</p>
               <p>created: {collections[name].schema.created_at}</p>
