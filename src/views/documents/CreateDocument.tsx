@@ -5,10 +5,12 @@ import * as monaco from 'monaco-editor'
 
 import { ipcRenderer } from 'electron'
 import { useParams, useNavigate } from 'react-router-dom'
+import { VscAdd, VscFolderOpened } from 'react-icons/vsc'
 
 import useStore from 'lib/store'
 import { DocumentAction } from 'lib/store/types'
 
+import Button from 'components/Button'
 import theme from 'data/theme.json'
 import generateJSONSchema from 'lib/generateJSONSchema'
 import generateDefaultDocument from 'lib/generateDefaultDocument'
@@ -101,7 +103,21 @@ export default function CreateDocument() {
             monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
               validate: true,
               allowComments: false,
-              schemas: [{ fileMatch: ['*'], uri: 'do.not.load', schema: jsonSchema }],
+              schemas: [
+                {
+                  fileMatch: ['*'],
+                  uri: 'do.not.load',
+                  schema: {
+                    anyOf: [
+                      { ...jsonSchema },
+                      {
+                        type: 'array',
+                        items: [{ ...jsonSchema }],
+                      },
+                    ],
+                  },
+                },
+              ],
             })
             monaco.editor.defineTheme('theme', theme as Monaco.editor.IStandaloneThemeData)
           }}
@@ -115,14 +131,15 @@ export default function CreateDocument() {
           }}
         />
       </div>
-      <div id="bottom" className="border-t border-black">
+      <div id="bottom" className="border-t border-black flex p-2">
         <select value={action} onChange={e => setAction(e.target.value as DocumentAction)}>
           <option value={DocumentAction.UPSERT}>Upsert</option>
           <option value={DocumentAction.CREATE}>Create</option>
           <option value={DocumentAction.UPDATE}>Update</option>
         </select>
-        <button onClick={handleCreateDocument}>Create</button>
-        <button onClick={handleImportFromFile}>Import from file</button>
+        {/* FIXME: Capitalize action! */}
+        <Button onClick={handleCreateDocument} icon={<VscAdd />} text={action} />
+        <Button onClick={handleImportFromFile} icon={<VscFolderOpened />} text="Import" />
       </div>
     </>
   )

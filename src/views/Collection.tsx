@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { ipcRenderer } from 'electron'
 
 import Editor, { loader } from '@monaco-editor/react'
 import Monaco from 'monaco-editor'
@@ -15,8 +16,13 @@ import { editorOptions } from 'components/CodeEditor'
 
 export default function Collection() {
   const { name } = useParams()
-  const [collections, setCurrentCollection] = useStore(state => [state.collections, state.setCurrentCollection])
+  const [collections, setCurrentCollection, deleteCollection] = useStore(state => [
+    state.collections,
+    state.setCurrentCollection,
+    state.deleteCollection,
+  ])
 
+  const navigate = useNavigate()
   const collection = name in collections ? collections[name] : null
 
   loader.config({ monaco })
@@ -25,7 +31,20 @@ export default function Collection() {
     if (collection) {
       setCurrentCollection(name)
     }
+
+    ipcRenderer.on('deleteCollection', (event, data) => {
+      deleteCollection(data.name)
+    })
+
+    return () => {
+      ipcRenderer.removeAllListeners('deleteCollection')
+    }
   }, [])
+
+  function handleDeleteCollection(name: string) {
+    ipcRenderer.invoke('confirmDeleteCollection', { name })
+    navigate('/collections')
+  }
 
   if (!collection) {
     return <div>FIXME: implement me!</div>
@@ -52,7 +71,7 @@ export default function Collection() {
           className="destructive"
           icon={<VscTrash />}
           text="Drop collection"
-          onClick={() => alert('FIXME: implement me!')}
+          onClick={() => handleDeleteCollection(name)}
         />
       </div>
     </>

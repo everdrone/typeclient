@@ -4,7 +4,8 @@
   "required": ["name", "fields"],
   "properties": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "fields": {
       "type": "array",
@@ -13,7 +14,8 @@
         "required": ["name", "type"],
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "type": {
             "type": "string",

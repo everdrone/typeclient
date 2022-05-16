@@ -15,7 +15,7 @@ export interface PreferencesSlice {
 }
 
 const createPreferencesSlice = (set: SetState<Store>, get: GetState<Store>): PreferencesSlice => ({
-  prefersJSONMode: false,
+  prefersJSONMode: true,
   googleAPIKey: '',
   isLoading: false,
   lastMapPosition: null,

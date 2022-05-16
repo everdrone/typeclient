@@ -1,7 +1,7 @@
 {
   "name": "typeclient",
   "productName": "Typeclient",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -30,6 +30,7 @@
     "@electron-forge/plugin-webpack": "6.0.0-beta.63",
     "@types/deep-diff": "^1.0.1",
     "@types/json-schema": "^7.0.11",
+    "@types/luxon": "^2.3.2",
     "@types/mapbox-gl": "^2.7.1",
     "@types/prettier": "^2.6.1",
     "@types/react": "^18.0.9",
@@ -66,6 +67,7 @@
     "deepmerge": "^4.2.2",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.0.1",
+    "luxon": "^2.4.0",
     "mapbox-gl": "^2.8.2",
     "monaco-editor": "^0.33.0",
     "prettier": "^2.6.2",

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { ipcRenderer } from 'electron'
 import { Link, useNavigate } from 'react-router-dom'
+import { DateTime } from 'luxon'
 
-import { VscTrash } from 'react-icons/vsc'
+import { VscAdd, VscTrash } from 'react-icons/vsc'
 
-import Button from 'components/Button'
+import Button, { LinkButton } from 'components/Button'
 import useStore from 'lib/store'
 
 export default function ListCollections() {
@@ -34,7 +35,7 @@ export default function ListCollections() {
     <div>
       <ul className="grid grid-cols-12 gap-4 p-4">
         {Object.keys(collections).map(name => (
-          <li key={name} className="col-span-4 2xl:col-span-3 bg-canvas-overlay p-4 rounded-xl">
+          <li key={name} className="col-span-4 2xl:col-span-3 bg-canvas-subtle p-4 rounded-xl">
             <p>{name}</p>
             <button
               onClick={() => {
@@ -47,7 +48,7 @@ export default function ListCollections() {
             <Link to={`/schema/${name}`}>
               <p>fields: {collections[name].schema.fields.length}</p>
               <p>shards: {collections[name].schema.num_memory_shards}</p>
-              <p>created: {collections[name].schema.created_at}</p>
+              <p>created: {DateTime.fromSeconds(collections[name].schema.created_at).toHTTP()}</p>
             </Link>
             <Button
               onClick={() => handleDeleteCollection(name)}
@@ -58,28 +59,7 @@ export default function ListCollections() {
           </li>
         ))}
       </ul>
-      <Link to="/collections/create">create</Link>
+      <LinkButton to="/collections/create" icon={<VscAdd />} text="Create" />
     </div>
   )
 }
-
-/*
-import electron from 'electron'
-const ipcRenderer = electron.ipcRenderer
-
-<button
-        onClick={() =>
-          ipcRenderer.invoke('showMessageBox', {
-            type: 'warning',
-            buttons: ['Delete', 'Cancel'],
-            message: 'Are you sure you want to delete this collection?',
-            title: 'Delete Collection',
-            cancelId: 1,
-            defaultId: 1,
-            noLink: true,
-          })
-        }
-      >
-        message
-      </button>
-       */

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { VscBracketDot, VscPreview } from 'react-icons/vsc'
+import { VscAdd, VscBracketDot, VscPreview } from 'react-icons/vsc'
 import { useNavigate } from 'react-router-dom'
 
 import Editor, { loader } from '@monaco-editor/react'
@@ -220,7 +220,6 @@ export default function CreateSchema() {
     if (prefersJSONMode) {
       try {
         setSchema(JSON.parse(rawValue))
-        console.log(schema)
       } catch (err) {
         console.warn('Invalid JSON')
       }
@@ -232,6 +231,19 @@ export default function CreateSchema() {
       setRawValue(JSON.stringify(schema, null, 2))
     }
   }, [schema])
+
+  function handleCreateCollection() {
+    // FIXME: validate schema and set errors at the bottom
+    createCollection(schema)
+      .then(res => {
+        console.log(res)
+        res ? navigate('/search') : alert('FIXME: no response???')
+      })
+      .catch(err => {
+        console.error(err)
+        alert('FIXME: implement me!')
+      })
+  }
 
   loader.config({ monaco })
 
@@ -256,15 +268,8 @@ export default function CreateSchema() {
           value={rawValue}
         />
       </div>
-      <div id="bottom" className="border-t border-black">
-        <button
-          onClick={() => {
-            // FIXME: validate schema and set errors at the bottom
-            createCollection(schema).then(res => (res ? navigate('/search') : alert('FIXME: implement me')))
-          }}
-        >
-          Create
-        </button>
+      <div id="bottom" className="border-t border-black p-2">
+        <Button onClick={handleCreateCollection} icon={<VscAdd />} text="Create" />
       </div>
     </>
   )
@@ -272,10 +277,10 @@ export default function CreateSchema() {
 
   return (
     <>
-      <div id="top">
+      <div id="top" className="p-2 border-b border-black">
         <Button
           icon={prefersJSONMode ? <VscPreview /> : <VscBracketDot />}
-          text={prefersJSONMode ? 'Form' : 'JSON'}
+          text={prefersJSONMode ? 'GUI Mode' : 'JSON Mode'}
           onClick={() => setPrefersJSONMode(!prefersJSONMode)}
         />
       </div>

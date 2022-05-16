@@ -8,7 +8,7 @@ export const editorOptions: Monaco.editor.IStandaloneEditorConstructionOptions =
   fontFamily: process.platform !== 'darwin' ? 'Cascadia Code' : 'SFMono-Regular',
   letterSpacing: 0.1,
   // lineHeight: 21,
-  // fontSize: 13,
+  // ...(process.platform === 'darwin' ? { fontSize: 13 } : {}),
   fontLigatures: false,
   formatOnPaste: true,
   minimap: {

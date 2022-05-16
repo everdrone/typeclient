@@ -8,6 +8,8 @@ import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/createApiKey.json'
 
 import useStore from 'lib/store'
+import Button from 'components/Button'
+import { VscAdd } from 'react-icons/vsc'
 
 export default function CreateApiKey() {
   const [createKey] = useStore(state => [state.createKey])
@@ -60,8 +62,8 @@ export default function CreateApiKey() {
           }}
         />
       </div>
-      <div id="bottom" className="border-t border-black">
-        <button onClick={handleCreate}>Create</button>
+      <div id="bottom" className="border-t border-black p-2">
+        <Button onClick={handleCreate} icon={<VscAdd />} text="Create" />
       </div>
     </>
   )
