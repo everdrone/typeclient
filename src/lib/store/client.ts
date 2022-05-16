@@ -14,7 +14,6 @@ import {
   getAllFieldsOfType,
   connectionTimeoutSeconds,
   cacheSearchResultsForSeconds,
-  getClientOrThrow,
 } from './common'
 
 export interface ClientSlice {
@@ -60,10 +59,10 @@ const createClientSlice = (set: SetState<Store>, get: GetState<Store>): ClientSl
 
     if (isConnected) {
       // enforce type
-      client = client!
+      client = client as Client
 
       // update collections
-      const serverCollections = await client!.collections().retrieve()
+      const serverCollections = await client.collections().retrieve()
       collections = serverCollections.reduce(
         (acc, val) => ({
           ...acc,

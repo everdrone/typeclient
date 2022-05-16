@@ -1,23 +1,7 @@
-/*
-
-{
-  "q": "hai",
-  "query_by": "name,alt_names,region.name,region.alt_names,subregion.name,subregion.alt_names",
-  "query_by_weights": "3,3,2,2,1,1",
-  "exclude_fields": "alt_names,region.alt_names,subregion.alt_names",
-  "sort_by": "location(48.853, 2.344):asc,_text_match:desc",
-  "group_by": "country.name,region.name",
-  "exhaustive_search": true,
-  "prioritize_exact_match": true,
-  "facet_by": "timezone",
-  "per_page": 20
-}
-
-*/
-
 import { CollectionSchema, SearchParams } from './store/types'
 import { getAllFieldsOfType } from './store/common'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function sampleItems(array: any[], items: number) {
   const shuffled = array.sort(() => 0.5 - Math.random())
   return shuffled.slice(0, items)

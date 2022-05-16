@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ipcRenderer } from 'electron'
 
 import { Highlight } from 'react-instantsearch-dom'
 import { Link } from 'react-router-dom'
 
 import useStore from 'lib/store'
+import { GenericObject } from 'lib/store/types'
 import Button from 'components/Button'
 
 const ignoreKeys = ['objectID', '__position', '_snippetResult', '_highlightResult', 'text_match']
 
-function Tabular({ hit }: any) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function Tabular({ hit }: GenericObject) {
   const [currentCollectionName] = useStore(state => [state.currentCollectionName, state.deleteDocument])
 
   function handleDeleteDocument() {
@@ -40,7 +42,7 @@ function Tabular({ hit }: any) {
   )
 }
 
-export default function Tabular2({ hit }: any) {
+export default function Tabular2({ hit }: GenericObject) {
   return (
     <>
       <div className="grid grid-cols-12 gap-x-4">

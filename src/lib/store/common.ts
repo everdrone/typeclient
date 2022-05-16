@@ -1,5 +1,4 @@
 import deepEqual from 'fast-deep-equal'
-import deepDiff from 'deep-diff'
 
 import { CollectionSchema, ExtendedCollectionsMap, Client, ComponentName, FieldType } from './types'
 
@@ -79,7 +78,7 @@ export async function refreshCollections(
 }
 
 export function getAllFieldsOfType(collection: CollectionSchema, types: FieldType[]) {
-  return collection.fields.filter((field: any) => field.index && types.includes(field.type) && field.name)
+  return collection.fields.filter(field => field.index && types.includes(field.type) && field.name)
 }
 
 export async function checkConnection(client: Client | null) {
@@ -101,7 +100,7 @@ export function getClientOrThrow(client: Client | null) {
     throw new Error('Client is not connected')
   }
 
-  return client!
+  return client as Client
 }
 
 export type Store = ClientSlice & CollectionSlice & DocumentSlice & KeySlice & PreferencesSlice

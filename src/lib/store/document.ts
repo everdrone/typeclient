@@ -7,12 +7,12 @@ import { Store, getClientOrThrow } from './common'
 export interface DocumentSlice {
   createDocument: (
     collectionName: string,
-    document: any | any[],
+    document: Record<string, unknown> | Record<string, unknown>[],
     action: DocumentAction
-  ) => Promise<ImportResponse[]> | Promise<{}>
-  retrieveDocument: (collectionName: string, id: string) => Promise<{}>
-  deleteDocument: (collectionName: string, id: string) => Promise<{}>
-  search: (collectionName: string, params: SearchParams) => Promise<SearchResponse<{}>>
+  ) => Promise<ImportResponse[]> | Promise<Record<string, unknown>>
+  retrieveDocument: (collectionName: string, id: string) => Promise<Record<string, unknown>>
+  deleteDocument: (collectionName: string, id: string) => Promise<Record<string, unknown>>
+  search: (collectionName: string, params: SearchParams) => Promise<SearchResponse<Record<string, unknown>>>
 }
 
 const createDocumentSlice = (set: SetState<Store>, get: GetState<Store>): DocumentSlice => ({

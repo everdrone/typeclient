@@ -1,6 +1,6 @@
 import { FieldType, CollectionSchema } from './store/types'
 
-function getFieldDefaultValue(type: FieldType): any {
+function getFieldDefaultValue(type: FieldType): string | number | Array<Array<null> | null> | boolean {
   switch (type) {
     case 'string':
       return ''

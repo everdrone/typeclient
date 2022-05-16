@@ -8,10 +8,9 @@ import Button from 'components/Button'
 import useStore from 'lib/store'
 
 export default function ListCollections() {
-  const [collections, deleteCollection, refreshCollections, setCurrentCollection] = useStore(state => [
+  const [collections, deleteCollection, setCurrentCollection] = useStore(state => [
     state.collections,
     state.deleteCollection,
-    state.refreshCollections,
     state.setCurrentCollection,
   ])
 

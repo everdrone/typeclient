@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import Editor, { loader } from '@monaco-editor/react'
 import Monaco from 'monaco-editor'

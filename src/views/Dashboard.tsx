@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import useStore from 'lib/store'
 import { MetricsResponse } from 'lib/store/types'
@@ -8,7 +8,7 @@ import prettyBytes from 'pretty-bytes'
 export default function Dashboard() {
   const [getMetrics] = useStore(state => [state.getMetrics])
 
-  const [metrics, setMetrics] = React.useState<MetricsResponse>()
+  const [metrics, setMetrics] = useState<MetricsResponse>()
 
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 
@@ -17,7 +17,7 @@ export default function Dashboard() {
       .then(metrics => {
         setMetrics(metrics)
       })
-      .catch(err => alert('FIXME: implement me!'))
+      .catch(() => alert('FIXME: implement me!'))
   }
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function Dashboard() {
               if (key in metrics) {
                 return (
                   <li key={key}>
-                    {formatCPUName(key)}: {parseInt((metrics as any)[key])}%
+                    {formatCPUName(key)}: {parseInt(metrics[key as keyof MetricsResponse])}%
                   </li>
                 )
               }

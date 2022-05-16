@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, session, Menu } from 'electron'
+import { BrowserWindow } from 'electron'
 
 const aboutWindowOptions: Electron.BrowserWindowConstructorOptions = {
   height: 250,

@@ -4,6 +4,7 @@ import cn from 'clsx'
 import { Link, LinkProps } from 'react-router-dom'
 
 import 'styles/button.scss'
+import { noop } from 'lib/store/types'
 
 interface ButtonProps {
   disabled?: boolean
@@ -14,7 +15,7 @@ interface ButtonProps {
   text?: string
 }
 
-export default function Button({ disabled = false, onClick = () => {}, active, className, icon, text }: ButtonProps) {
+export default function Button({ disabled = false, onClick = noop, active, className, icon, text }: ButtonProps) {
   return (
     <button
       disabled={disabled}
@@ -27,15 +28,7 @@ export default function Button({ disabled = false, onClick = () => {}, active, c
   )
 }
 
-export function LinkButton({
-  to,
-  disabled = false,
-  onClick = () => {},
-  active,
-  className,
-  icon,
-  text,
-}: ButtonProps & LinkProps) {
+export function LinkButton({ to, disabled = false, active, className, icon, text }: ButtonProps & LinkProps) {
   return (
     <Link
       to={to}

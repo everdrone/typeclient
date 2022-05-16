@@ -4,7 +4,7 @@ import fs from 'fs'
 import store from 'lib/store'
 
 export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
-  ipcMain.handle('confirmDeleteDocument', (event, options) => {
+  ipcMain.handle('confirmDeleteDocument', (_, options) => {
     dialog
       .showMessageBox(mainWindow, {
         type: 'warning',
@@ -24,7 +24,7 @@ export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
       })
   })
 
-  ipcMain.handle('openImportDocumentsFromFile', (event, options) => {
+  ipcMain.handle('openImportDocumentsFromFile', () => {
     dialog
       .showOpenDialog(mainWindow, {
         title: 'Import documents',
@@ -39,6 +39,7 @@ export default function registerDocumentHandlers(mainWindow: BrowserWindow) {
 
           const documents = fs.readFileSync(response.filePaths[0], { encoding: 'utf8', flag: 'r' })
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           let parsedDocuments: any = null
 
           try {

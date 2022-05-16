@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Transition } from '@headlessui/react'
 
 import 'styles/index.scss'
@@ -26,7 +26,7 @@ import {
   CreateApiKey,
 } from './views'
 
-import { HashRouter, Routes, Route, Link } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import TitleBar from 'components/TitleBar'
 import Sidebar from 'components/Sidebar'
 
@@ -46,7 +46,6 @@ export default function App() {
 
     console.info('connecting...')
     connect(connection.apiKey, connection.nodes)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   console.log('render')

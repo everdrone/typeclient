@@ -1,11 +1,6 @@
 import { GetState, SetState } from 'zustand'
 
-import {
-  KeyCreateSchema,
-  KeySchema,
-  KeysRetrieveSchema,
-  KeyDeleteSchema,
-} from './types'
+import { KeyCreateSchema, KeySchema, KeysRetrieveSchema, KeyDeleteSchema } from './types'
 
 import { getClientOrThrow, Store } from './common'
 
@@ -16,15 +11,12 @@ export interface KeySlice {
   deleteKey: (id: number) => Promise<KeyDeleteSchema | false>
 }
 
-const createKeySlice = (
-  set: SetState<Store>,
-  get: GetState<Store>
-): KeySlice => ({
+const createKeySlice = (set: SetState<Store>, get: GetState<Store>): KeySlice => ({
   createKey: async function (options) {
-    let client = getClientOrThrow(get().client)
+    const client = getClientOrThrow(get().client)
 
     try {
-      let result = await client.keys().create(options)
+      const result = await client.keys().create(options)
 
       return result
     } catch (err) {
@@ -33,10 +25,10 @@ const createKeySlice = (
     }
   },
   retrieveKey: async function (id) {
-    let client = getClientOrThrow(get().client)
+    const client = getClientOrThrow(get().client)
 
     try {
-      let result = await client.keys(id).retrieve()
+      const result = await client.keys(id).retrieve()
 
       return result
     } catch (err) {
@@ -45,10 +37,10 @@ const createKeySlice = (
     }
   },
   getAllKeys: async function () {
-    let client = getClientOrThrow(get().client)
+    const client = getClientOrThrow(get().client)
 
     try {
-      let result = await client.keys().retrieve()
+      const result = await client.keys().retrieve()
 
       return result
     } catch (err) {
@@ -57,10 +49,10 @@ const createKeySlice = (
     }
   },
   deleteKey: async function (id) {
-    let client = getClientOrThrow(get().client)
+    const client = getClientOrThrow(get().client)
 
     try {
-      let result = await client.keys(id).delete()
+      const result = await client.keys(id).delete()
 
       return result
     } catch (err) {

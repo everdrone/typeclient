@@ -54,7 +54,7 @@ export default function CreateDocument() {
       } else {
         setIsLoading(true)
         createDocument(currentCollectionName, data.documents, action)
-          .then(res => {
+          .then(() => {
             // all is good
             console.log(`imported ${data.documents.length} documents`)
             refreshCollections()
@@ -79,7 +79,7 @@ export default function CreateDocument() {
 
   function handleCreateDocument() {
     const parsedDocument = JSON.parse(document)
-    createDocument(currentCollectionName, parsedDocument, action).then(res => {
+    createDocument(currentCollectionName, parsedDocument, action).then(() => {
       // all is good
       refreshCollections()
       navigate('/search')

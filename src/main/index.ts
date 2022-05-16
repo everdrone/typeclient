@@ -76,7 +76,7 @@ app.on('ready', () => {
   createWindow()
 
   // create application menu
-  let menuTemplate: Electron.MenuItemConstructorOptions[] = []
+  const menuTemplate: Electron.MenuItemConstructorOptions[] = []
 
   if (platform === 'darwin') {
     menuTemplate.push({
@@ -113,6 +113,7 @@ app.on('ready', () => {
       {
         label: 'GitHub Repo',
         click: async () => {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           const { shell } = require('electron')
           await shell.openExternal('https://github.com/everdrone/typeclient')
         },

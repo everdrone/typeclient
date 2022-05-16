@@ -4,11 +4,11 @@ import { persist } from 'zustand/middleware'
 import deepMerge from 'deepmerge'
 
 import { Store } from './common'
-import createClientSlice, { ClientSlice } from './client'
-import createCollectionSlice, { CollectionSlice } from './collection'
-import createDocumentSlice, { DocumentSlice } from './document'
-import createKeySlice, { KeySlice } from './key'
-import createPreferencesSlice, { PreferencesSlice } from './preferences'
+import createClientSlice from './client'
+import createCollectionSlice from './collection'
+import createDocumentSlice from './document'
+import createKeySlice from './key'
+import createPreferencesSlice from './preferences'
 
 const STORAGE_NAME = 'typesense-dashboard-connection'
 
@@ -25,6 +25,7 @@ const useStore = create<Store>()(
       name: STORAGE_NAME,
       // exclude non-serializable fields
       partialize: state => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { client, adapter, isConnected, isConnecting, ...rest } = state
 
         return { ...rest }

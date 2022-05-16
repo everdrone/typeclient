@@ -1,15 +1,15 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react'
+import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import Map, { Marker, NavigationControl, useControl } from 'react-map-gl'
+import { Map, Marker, NavigationControl } from 'react-map-gl'
 
-// @ts-ignore
-import { connectGeoSearch, GeoSearchProvided } from 'react-instantsearch-dom'
-import { InstantSearch, Configure } from 'react-instantsearch-dom'
+import { GeoSearchProvided } from 'react-instantsearch-core'
+import { connectGeoSearch, InstantSearch, Configure } from 'react-instantsearch-dom'
 
 import useStore from 'lib/store'
+import { GenericObject } from 'lib/store/types'
 
 const accessToken = 'pk.eyJ1IjoiZXZlcmRyb25lIiwiYSI6ImNsMjd3bDl6NTAxbW4zZG84Mnpvemhvb3EifQ.NK07hupZL8yXapGJAMiRlg'
 
@@ -23,22 +23,20 @@ interface GeoBounds {
   southWest: GeoPoint
 }
 
-function MapBox({ refine, hits, currentRefinement, position }: GeoSearchProvided) {
-  const mapRef = React.useRef<mapboxgl.Map>()
+function MapBox({ refine, hits }: GeoSearchProvided) {
+  const mapRef = useRef<mapboxgl.Map>()
   const [searchAsMove, setSearchAsMove] = useState(true)
 
   const searchAsMoveRef = useRef(searchAsMove)
   const [hasMovedSinceLastRefine, setHasMovedSinceLastRefine] = useState(false)
-  const [userInitiated, setUserInitiated] = useState(false)
 
   const [lastMapPosition, setLastMapPosition] = useStore(state => [state.lastMapPosition, state.setLastMapPosition])
   const navigate = useNavigate()
 
-  const handleOnLoad = React.useCallback(() => {
+  const handleOnLoad = useCallback(() => {
     if (!mapRef.current) return
 
     mapRef.current.on('movestart', () => {
-      setUserInitiated(true)
       if (!searchAsMoveRef.current) {
         setHasMovedSinceLastRefine(true)
       }
@@ -54,7 +52,6 @@ function MapBox({ refine, hits, currentRefinement, position }: GeoSearchProvided
     })
 
     mapRef.current.on('moveend', () => {
-      setUserInitiated(false)
       if (searchAsMoveRef.current) {
         const latLngBounds = mapRef.current.getBounds()
         const ne = latLngBounds.getNorthEast()
@@ -134,7 +131,7 @@ function MapBox({ refine, hits, currentRefinement, position }: GeoSearchProvided
 
   const markers = useMemo(
     () =>
-      hits.map(({ _geoloc, objectID }: any) => {
+      hits.map(({ _geoloc, objectID }: GenericObject) => {
         return (
           <Marker
             key={objectID}
@@ -170,6 +167,7 @@ function MapBox({ refine, hits, currentRefinement, position }: GeoSearchProvided
   return (
     <div className="absolute inset-0">
       <Map
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={mapRef as React.MutableRefObject<any>}
         // todo: store this stuff in the store!
         initialViewState={

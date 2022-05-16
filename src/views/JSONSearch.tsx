@@ -1,17 +1,15 @@
 import useStore from 'lib/store'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import CodeEditor from 'components/CodeEditor'
 import Monaco from 'monaco-editor'
-import prettier from 'prettier/standalone'
+import { format } from 'prettier/standalone'
 import prettierParserBabel from 'prettier/parser-babel'
 
 import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/searchParams.json'
-import Button from 'components/Button'
 
-import { ExtendedCollectionDefinition, SearchParams, SearchResponse } from 'lib/store/types'
-import { getAllFieldsOfType } from 'lib/store/common'
+import { ExtendedCollectionDefinition, SearchParams } from 'lib/store/types'
 import generateDefaultSearchParams from 'lib/generateDefaultSearchParams'
 
 import { Allotment } from 'allotment'
@@ -27,18 +25,16 @@ export default function JSONSearch() {
 
   const currentCollectionRef = useRef<ExtendedCollectionDefinition>(collections[currentCollectionName])
 
-  const [searchParams, setSearchParams] = React.useState<string>('')
+  const [searchParams, setSearchParams] = useState<string>('')
   const searchParamsRef = useRef<string>(searchParams)
-  const [error, setError] = React.useState<string | null>(null)
-  const [response, setResponse] = React.useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [response, setResponse] = useState<string | null>(null)
 
   useEffect(() => {
     currentCollectionRef.current = collections[currentCollectionName]
 
     const defaultSearchParams = generateDefaultSearchParams(collections[currentCollectionName].schema)
-    setSearchParams(
-      prettier.format(JSON.stringify(defaultSearchParams), { parser: 'json', plugins: [prettierParserBabel] })
-    )
+    setSearchParams(format(JSON.stringify(defaultSearchParams), { parser: 'json', plugins: [prettierParserBabel] }))
     console.log(defaultSearchParams)
   }, [currentCollectionName])
 
@@ -61,7 +57,7 @@ export default function JSONSearch() {
             if (formattedResponse.split('\n').length > 2000) {
               setResponse(formattedResponse)
             } else {
-              setResponse(prettier.format(formattedResponse, { parser: 'json', plugins: [prettierParserBabel] }))
+              setResponse(format(formattedResponse, { parser: 'json', plugins: [prettierParserBabel] }))
             }
           })
           .catch(err => setError(err.message))

@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useEffect } from 'react'
-import { Listbox, Menu } from '@headlessui/react'
+import React from 'react'
+import { Listbox } from '@headlessui/react'
 
 import useStore from 'lib/store'
 import { VscChevronDown } from 'react-icons/vsc'

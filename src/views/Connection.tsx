@@ -7,7 +7,6 @@ import Button from 'components/Button'
 
 import 'styles/connection.scss'
 import { VscAdd, VscTrash } from 'react-icons/vsc'
-import { useNavigate } from 'react-router-dom'
 
 interface ErrorMapping {
   apiKey: string | null
@@ -86,7 +85,7 @@ export default function Connection() {
       newErrors.nodes = ['At least one node is required']
     }
 
-    const nodeErrors = nodes.map((node, index) => {
+    const nodeErrors = nodes.map(node => {
       if (!node) {
         return 'Node is required'
       } else {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import useStore from 'lib/store'
@@ -7,7 +7,7 @@ import { KeysRetrieveSchema } from 'lib/store/types'
 export default function ApiKeys() {
   const [getAllKeys, deleteKey] = useStore(state => [state.getAllKeys, state.deleteKey])
 
-  const [keys, setKeys] = React.useState<KeysRetrieveSchema>()
+  const [keys, setKeys] = useState<KeysRetrieveSchema>()
 
   useEffect(() => {
     getAllKeys().then(result => result && setKeys(result))
@@ -15,7 +15,7 @@ export default function ApiKeys() {
 
   async function handleDelete(id: number) {
     // FIXME: ask for confirmation!
-    const result = await deleteKey(id)
+    await deleteKey(id)
     const newKeys = await getAllKeys()
     if (newKeys !== false) {
       setKeys(newKeys)

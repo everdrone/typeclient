@@ -107,7 +107,7 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
       errors = { ...errors, allFields: null }
     }
 
-    const fieldErrors = schema.fields.map((field, index) => {
+    const fieldErrors = schema.fields.map(field => {
       if (!field.name) {
         result &&= false
         return 'Field name is required'
@@ -128,8 +128,8 @@ function CreateCollectionForm({ schema, setSchema }: FormProps) {
   function handleCreate() {
     if (validateForm()) {
       createCollection(schema)
-        .then(res => alert('implement me'))
-        .catch(err => alert('implement me'))
+        .then(() => alert('implement me'))
+        .catch(() => alert('implement me'))
     }
   }
 

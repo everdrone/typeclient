@@ -3,8 +3,6 @@ import Editor, { loader } from '@monaco-editor/react'
 import Monaco from 'monaco-editor'
 import * as monaco from 'monaco-editor'
 
-import useStore from 'lib/store'
-
 import theme from 'data/theme.json'
 import jsonSchema from 'data/schema/createCollection.json'
 
@@ -22,8 +20,6 @@ const defaultObject = {
 export default function CodeEditor() {
   console.log('Editor')
   loader.config({ monaco })
-
-  const { connection, currentCollectionName, collections } = useStore()
 
   return (
     <div className="h-[400px] w-[600px] rounded-xl overflow-hidden m-5 shadow-xl">

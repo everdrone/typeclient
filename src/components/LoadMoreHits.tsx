@@ -1,7 +1,17 @@
 import React from 'react'
 import { connectInfiniteHits } from 'react-instantsearch-dom'
+import { InfiniteHitsProvided } from 'react-instantsearch-core'
 
 import Button from 'components/Button'
+
+interface HitDisplayComponentProps {
+  hit: any
+  map?: any
+}
+
+interface LoadMoreHitsProps {
+  component: React.ComponentType<HitDisplayComponentProps>
+}
 
 function LoadMoreHits({
   hits,
@@ -11,13 +21,13 @@ function LoadMoreHits({
   refineNext,
   // componentDisplayMap,
   component,
-}: any) {
+}: InfiniteHitsProvided & LoadMoreHitsProps) {
   const HitComponent = component
 
   return (
     <>
       <ul>
-        {hits.map((hit: any) => (
+        {hits.map((hit: Record<string, any>) => (
           <li key={hit.objectID}>
             <HitComponent hit={hit} />
           </li>

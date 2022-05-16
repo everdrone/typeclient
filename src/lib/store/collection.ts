@@ -148,7 +148,7 @@ const createCollectionSlice = (set: SetState<Store>, get: GetState<Store>): Coll
     let currentCollectionName = get().currentCollectionName
 
     try {
-      const result = await client.collections(name).delete()
+      await client.collections(name).delete()
 
       if (currentCollectionName === name) {
         const availableCollections = Object.keys(get().collections).filter(collectionName => collectionName !== name)

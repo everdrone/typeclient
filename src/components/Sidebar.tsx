@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useLocation } from 'react-router-dom'
 
 import useStore from 'lib/store'
@@ -21,7 +21,7 @@ import {
 } from 'react-icons/vsc'
 
 export default function Sidebar() {
-  const [disconnect, currentCollectionName, setCurrentCollection, collections] = useStore(state => [
+  const [disconnect, currentCollectionName] = useStore(state => [
     state.disconnect,
     state.currentCollectionName,
     state.setCurrentCollection,
