@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron'
 import { Link, useNavigate } from 'react-router-dom'
 import { DateTime } from 'luxon'
 
-import { VscAdd, VscTrash } from 'react-icons/vsc'
+import { VscAdd, VscTrash, VscUnverified } from 'react-icons/vsc'
 
 import Button, { LinkButton } from 'components/Button'
 import useStore from 'lib/store'
@@ -32,6 +32,20 @@ export default function ListCollections() {
 
   function handleDeleteCollection(name: string) {
     ipcRenderer.invoke('confirmDeleteCollection', { name })
+  }
+
+  if (Object.keys(collections).length === 0) {
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <p>There are no collections yet</p>
+        <Button
+          onClick={() => navigate('/collections/create')}
+          icon={<VscAdd />}
+          text="Create"
+          className="accent mt-2"
+        />
+      </div>
+    )
   }
 
   return (

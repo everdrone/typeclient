@@ -79,8 +79,8 @@ export default function Search() {
 
   return (
     <InstantSearch searchClient={adapter.searchClient} indexName={currentCollection.schema.name}>
-      <div id="top">
-        <SearchBox />
+      <div id="top" className="p-4">
+        <SearchBox autoFocus />
         <CurrentRefinements />
         <Stats />
       </div>

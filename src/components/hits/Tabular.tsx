@@ -45,7 +45,7 @@ function Tabular({ hit }: GenericObject) {
 export default function Tabular2({ hit }: GenericObject) {
   return (
     <>
-      <div className="grid grid-cols-12 gap-x-4">
+      <div className="grid grid-cols-12 gap-x-4 select-text">
         {Object.keys(hit)
           .filter(key => !ignoreKeys.includes(key))
           .map(key => (

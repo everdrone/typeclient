@@ -11,3 +11,25 @@
   right: 0;
   bottom: 0;
 }
+
+.ais-SearchBox {
+  display: flex;
+  width: 100%;
+
+  .ais-SearchBox-form {
+    width: 100%;
+
+    input {
+      width: 100%;
+      @apply bg-canvas-overlay border border-border-default px-3 py-1 rounded-lg placeholder-secondary-muted mb-2 shadow-xl;
+    }
+
+    .ais-SearchBox-submitIcon {
+      display: none;
+    }
+
+    .ais-SearchBox-reset {
+      display: none;
+    }
+  }
+}
